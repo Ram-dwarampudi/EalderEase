@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElderEase – Care at Your Doorstep</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    ElderEase
+  </div>
+  <div class="nav-links">
+    <button onclick="showPage('home')" id="nav-home" class="active">Home</button>
+    <button onclick="showPage('booking')" id="nav-booking">Book a Service</button>
+    <button onclick="showPage('dashboard')" id="nav-dashboard">My Bookings</button>
+    <button onclick="showPage('admin')" id="nav-admin">Admin Panel</button>
+    <button onclick="showPage('login')" id="nav-login" class="nav-cta">Sign In</button>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div>
+      <div class="hero-badge">🌟 Trusted by 2,400+ families across the city</div>
+      <h1>Care & Assistance for <span>Every Elder</span> in Your Family</h1>
+      <p>We send trained, compassionate assistants to help your loved ones with hospital visits, grocery shopping, medicine pickup, and daily errands — right at their doorstep.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('booking')">📅 Book an Assistant</button>
+        <button class="btn-secondary" onclick="showPage('login')">Register Now</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="num">98%</div>
+          <div class="lbl">Satisfaction rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">150+</div>
+          <div class="lbl">Trained assistants</div>
+        </div>
+      </div>
+      <div class="assistant-preview">
+        <div class="avatar av-green">RK</div>
+        <div class="assistant-info">
+          <strong>Ravi Kumar</strong>
+          <span>Hospital & Medicine specialist • ⭐ 4.9</span>
+        </div>
+        <span class="badge-avail">Available today</span>
+      </div>
+      <div class="assistant-preview">
+        <div class="avatar av-amber">SM</div>
+        <div class="assistant-info">
+          <strong>Sunita Mishra</strong>
+          <span>Grocery & Errands expert • ⭐ 4.8</span>
+        </div>
+        <span class="badge-avail">Available today</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>Services We Provide</h2>
+      <p>Simple booking for all the tasks that become difficult with age — we're here to help</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon si-teal">🏥</div>
+        <h3>Hospital Visits</h3>
+        <p>Our assistant accompanies your elder to appointments, ensures they're comfortable, and reports back to family.</p>
+        <div class="service-price">From ₹300 / visit</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon si-green">💊</div>
+        <h3>Medicine Pickup</h3>
+        <p>Prescription medicines collected and delivered safely from your trusted pharmacy, no waiting needed.</p>
+        <div class="service-price">From ₹150 / trip</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon si-amber">🛒</div>
+        <h3>Grocery Shopping</h3>
+        <p>Fresh vegetables, groceries, and household essentials bought and delivered as per your list.</p>
+        <div class="service-price">From ₹200 / trip</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon si-coral">📋</div>
+        <h3>Daily Errands</h3>
+        <p>Bank visits, bill payments, postal work, or any general task that requires going out — we handle it.</p>
+        <div class="service-price">From ₹250 / errand</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section how-bg">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Book help for your loved one in under 3 minutes</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Register & Sign In</h3>
+        <p>Create an account for yourself or your elderly family member in minutes</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Choose a Service</h3>
+        <p>Select what kind of help is needed and pick a convenient time slot</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get Matched</h3>
+        <p>We assign a trained, verified assistant available in your area</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Track & Pay</h3>
+        <p>Follow the booking status live and pay securely after the service</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>What Families Say</h2>
+      <p>Real reviews from people who trust ElderEase every day</p>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"My 78-year-old mother used to skip her checkups because no one could accompany her. ElderEase changed everything — Ravi is so patient and kind."</blockquote>
+        <div class="reviewer">
+          <div class="avatar av-green" style="width:44px;height:44px;font-size:16px;">PS</div>
+          <div><strong>Priya Sharma</strong><span>Daughter, Hyderabad</span></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I live in Bangalore and my parents are in Vijayawada. Having ElderEase gives me peace of mind. The live updates feature is a blessing."</blockquote>
+        <div class="reviewer">
+          <div class="avatar av-teal" style="width:44px;height:44px;font-size:16px;">AK</div>
+          <div><strong>Arjun Kumar</strong><span>Son, Bangalore</span></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★☆</div>
+        <blockquote>"The booking is so simple even I can do it myself! Large buttons, clear steps — and Sunita always brings exactly what's on my list."</blockquote>
+        <div class="reviewer">
+          <div class="avatar av-amber" style="width:44px;height:44px;font-size:16px;">VR</div>
+          <div><strong>Venkateswara Rao</strong><span>Elder member, 74 years</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-bar">
+    <div class="fl">🌿 ElderEase</div>
+    <div>© 2025 ElderEase. Care at your doorstep. | Privacy Policy | Terms of Service</div>
+    <div>📞 Emergency: 1800-ELDER-HELP</div>
+  </footer>
+</div>
+
+<!-- ===== BOOKING PAGE ===== -->
+<div id="page-booking" class="page">
+  <div class="booking-container">
+    <h2>Book an Assistant</h2>
+    <p>Select your service, date, and time — we'll match you with the best available assistant.</p>
+    
+    <div class="booking-steps">
+      <div class="bstep done">✓ Logged In</div>
+      <div class="bstep current">1. Choose Service</div>
+      <div class="bstep">2. Date & Time</div>
+      <div class="bstep">3. Confirm & Pay</div>
+    </div>
+
+    <div class="form-section">
+      <h3>Select a Service</h3>
+      <div class="service-select-grid">
+        <div class="service-option selected" onclick="selectService(this)">
+          <span class="so-icon">🏥</span>
+          <div class="so-text"><strong>Hospital Visit</strong><span>Accompany to appointment</span></div>
+        </div>
+        <div class="service-option" onclick="selectService(this)">
+          <span class="so-icon">💊</span>
+          <div class="so-text"><strong>Medicine Pickup</strong><span>From pharmacy</span></div>
+        </div>
+        <div class="service-option" onclick="selectService(this)">
+          <span class="so-icon">🛒</span>
+          <div class="so-text"><strong>Grocery Shopping</strong><span>With your list</span></div>
+        </div>
+        <div class="service-option" onclick="selectService(this)">
+          <span class="so-icon">📋</span>
+          <div class="so-text"><strong>Daily Errand</strong><span>Bank, bills, etc.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Patient Details</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Elder's Full Name</label>
+          <input type="text" placeholder="e.g. Ramaiah Garu" value="Venkata Ramaiah">
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" placeholder="Age" value="72">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" placeholder="Pick-up address" value="12-3 MG Road, Vijayawada">
+        </div>
+        <div class="form-group">
+          <label>Emergency Contact</label>
+          <input type="tel" placeholder="Family phone number" value="+91 98765 43210">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea rows="3" placeholder="Any medical conditions, preferred assistant, special notes...">Please speak slowly, carries a walking stick. Appointment at Apollo Hospital at 10 AM.</textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Select Date & Time Slot</h3>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label>Date</label>
+        <input type="date" value="2025-01-20">
+      </div>
+      <label style="font-size:15px;font-weight:500;color:var(--text);display:block;margin-bottom:12px;">Available Slots</label>
+      <div class="timeslots">
+        <div class="timeslot unavailable">8:00 AM</div>
+        <div class="timeslot unavailable">9:00 AM</div>
+        <div class="timeslot selected">10:00 AM</div>
+        <div class="timeslot">11:00 AM</div>
+        <div class="timeslot">12:00 PM</div>
+        <div class="timeslot unavailable">1:00 PM</div>
+        <div class="timeslot">2:00 PM</div>
+        <div class="timeslot">3:00 PM</div>
+      </div>
+      <p style="font-size:13px;color:var(--text-light);margin-top:12px;">Gray slots are already booked. Select a green slot to proceed.</p>
+    </div>
+
+    <div class="form-section">
+      <h3>Cost Summary</h3>
+      <div class="cost-summary">
+        <div class="cost-row"><span>Hospital Visit — Base fee</span><span>₹300</span></div>
+        <div class="cost-row"><span>Duration (estimated 3 hrs)</span><span>₹150</span></div>
+        <div class="cost-row"><span>Platform fee</span><span>₹30</span></div>
+        <div class="cost-row total"><span>Total (pay after service)</span><span>₹480</span></div>
+      </div>
+      <button class="btn-book" onclick="showSuccess()">✅ Confirm Booking</button>
+    </div>
+
+    <div class="emergency-box">
+      <span class="em-icon">🚨</span>
+      <div>
+        <p><strong>Need immediate help?</strong>Call our emergency line for urgent assistance: <strong style="font-size:17px;">1800-ELDER-HELP</strong> (available 24/7)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD PAGE ===== -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard">
+    <div class="dash-header">
+      <div>
+        <h2>Good morning, Priya 👋</h2>
+        <p>Manage bookings for Venkata Ramaiah Garu</p>
+      </div>
+      <button class="btn-primary" onclick="showPage('booking')">+ New Booking</button>
+    </div>
+
+    <div class="dash-stats">
+      <div class="ds-card accent">
+        <div class="ds-icon">📅</div>
+        <div class="ds-num">2</div>
+        <div class="ds-label">Upcoming bookings</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">✅</div>
+        <div class="ds-num">18</div>
+        <div class="ds-label">Completed services</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">⭐</div>
+        <div class="ds-num">4.9</div>
+        <div class="ds-label">Average rating given</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">💰</div>
+        <div class="ds-num">₹4,820</div>
+        <div class="ds-label">Total spent</div>
+      </div>
+    </div>
+
+    <div class="bookings-table">
+      <div class="bt-header">
+        <h3>All Bookings</h3>
+        <div class="bt-filter">
+          <button class="filter-btn active">All</button>
+          <button class="filter-btn">Upcoming</button>
+          <button class="filter-btn">Completed</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Service</th>
+            <th>Assistant</th>
+            <th>Date & Time</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#EE-2841</td>
+            <td>🏥 Hospital Visit</td>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px;">RK</div> Ravi Kumar</div></td>
+            <td>Jan 20, 10:00 AM</td>
+            <td>₹480</td>
+            <td><span class="status-badge s-pending">Pending</span></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>#EE-2797</td>
+            <td>💊 Medicine Pickup</td>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px;">SM</div> Sunita Mishra</div></td>
+            <td>Jan 18, 2:00 PM</td>
+            <td>₹180</td>
+            <td><span class="status-badge s-progress">In Progress</span></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>#EE-2701</td>
+            <td>🛒 Grocery Shopping</td>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-teal" style="width:32px;height:32px;font-size:12px;">MR</div> Mohan Rao</div></td>
+            <td>Jan 15, 9:00 AM</td>
+            <td>₹230</td>
+            <td><span class="status-badge s-done">Completed</span></td>
+            <td><span class="rating-stars">★★★★★</span></td>
+          </tr>
+          <tr>
+            <td>#EE-2654</td>
+            <td>📋 Daily Errand</td>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px;">RK</div> Ravi Kumar</div></td>
+            <td>Jan 10, 11:00 AM</td>
+            <td>₹280</td>
+            <td><span class="status-badge s-done">Completed</span></td>
+            <td><span class="rating-stars">★★★★☆</span></td>
+          </tr>
+          <tr>
+            <td>#EE-2590</td>
+            <td>🏥 Hospital Visit</td>
+            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px;">SM</div> Sunita Mishra</div></td>
+            <td>Jan 5, 8:00 AM</td>
+            <td>₹510</td>
+            <td><span class="status-badge s-cancelled">Cancelled</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="page-admin" class="page">
+  <div class="admin">
+    <div style="margin-bottom:28px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;">Admin Dashboard</h2>
+      <p style="color:var(--text-mid);font-size:16px;">Manage assistants, bookings, and platform operations</p>
+    </div>
+
+    <div class="dash-stats" style="margin-bottom:28px;">
+      <div class="ds-card accent">
+        <div class="ds-icon">📋</div>
+        <div class="ds-num">28</div>
+        <div class="ds-label">Active bookings today</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">👥</div>
+        <div class="ds-num">150</div>
+        <div class="ds-label">Total assistants</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">👴</div>
+        <div class="ds-num">2,412</div>
+        <div class="ds-label">Registered users</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-icon">💰</div>
+        <div class="ds-num">₹1.4L</div>
+        <div class="ds-label">Revenue this month</div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-sidebar">
+        <h3>Navigation</h3>
+        <div class="admin-nav-item active">📊 Overview</div>
+        <div class="admin-nav-item">👥 Assistants</div>
+        <div class="admin-nav-item">📅 Bookings</div>
+        <div class="admin-nav-item">👴 Users</div>
+        <div class="admin-nav-item">💰 Payments</div>
+        <div class="admin-nav-item">⭐ Reviews</div>
+        <div class="admin-nav-item">🔔 Notifications</div>
+        <div class="admin-nav-item">⚙️ Settings</div>
+      </div>
+
+      <div class="admin-main">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Assistant Availability Today</h3>
+            <button class="btn-sm">+ Add Assistant</button>
+          </div>
+          <div class="assistant-list">
+            <div class="assistant-row">
+              <div class="avail-dot dot-green"></div>
+              <div class="avatar av-green">RK</div>
+              <div class="ar-info"><strong>Ravi Kumar</strong><span>Hospital & Medicine • Zone A</span></div>
+              <div class="ar-tasks"><strong>3</strong>tasks today</div>
+              <span class="badge-avail">Available</span>
+            </div>
+            <div class="assistant-row">
+              <div class="avail-dot dot-amber"></div>
+              <div class="avatar av-amber">SM</div>
+              <div class="ar-info"><strong>Sunita Mishra</strong><span>Grocery & Errands • Zone B</span></div>
+              <div class="ar-tasks"><strong>5</strong>tasks today</div>
+              <span class="status-badge s-progress">On duty</span>
+            </div>
+            <div class="assistant-row">
+              <div class="avail-dot dot-green"></div>
+              <div class="avatar av-teal">MR</div>
+              <div class="ar-info"><strong>Mohan Rao</strong><span>All services • Zone C</span></div>
+              <div class="ar-tasks"><strong>2</strong>tasks today</div>
+              <span class="badge-avail">Available</span>
+            </div>
+            <div class="assistant-row">
+              <div class="avail-dot dot-red"></div>
+              <div class="avatar av-green">LB</div>
+              <div class="ar-info"><strong>Lakshmi Bai</strong><span>Hospital specialist • Zone A</span></div>
+              <div class="ar-tasks"><strong>0</strong>today</div>
+              <span class="status-badge s-cancelled">Off duty</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Pending Assignments</h3>
+            <button class="btn-sm">Assign All</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Booking</th>
+                <th>User</th>
+                <th>Service</th>
+                <th>Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#EE-2841</td>
+                <td>Venkata Ramaiah</td>
+                <td>🏥 Hospital Visit</td>
+                <td>Jan 20, 10 AM</td>
+                <td><button class="btn-sm" style="font-size:12px;padding:7px 12px;">Assign</button></td>
+              </tr>
+              <tr>
+                <td>#EE-2843</td>
+                <td>Sarada Devi</td>
+                <td>💊 Medicine Pickup</td>
+                <td>Jan 20, 11 AM</td>
+                <td><button class="btn-sm" style="font-size:12px;padding:7px 12px;">Assign</button></td>
+              </tr>
+              <tr>
+                <td>#EE-2845</td>
+                <td>Krishna Murthy</td>
+                <td>🛒 Grocery Shopping</td>
+                <td>Jan 20, 2 PM</td>
+                <td><button class="btn-sm" style="font-size:12px;padding:7px 12px;">Assign</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="page-login" class="page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo" style="justify-content:center;margin-bottom:8px;">
+          <div class="logo-icon">🌿</div> ElderEase
+        </div>
+      </div>
+      <h2>Welcome Back</h2>
+      <p class="auth-sub">Sign in to manage your elder's care</p>
+      <div class="auth-form">
+        <div class="form-group">
+          <label>Phone number or Email</label>
+          <input type="text" placeholder="+91 98765 43210 or email@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Your password">
+        </div>
+        <button class="auth-btn" onclick="showPage('dashboard')">Sign In</button>
+      </div>
+      <div class="auth-toggle">
+        <span>Don't have an account? </span>
+        <button>Register here</button>
+      </div>
+      <div class="family-note">
+        <strong>Registering for a family member?</strong>
+        You can create an account and manage bookings on behalf of your elderly relative. Select "Register as Family Member" during sign-up.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS POPUP -->
+<div id="success-overlay" class="success-overlay" style="display:none;" onclick="closeSuccess()">
+  <div class="success-card" onclick="event.stopPropagation()">
+    <div class="success-icon">✅</div>
+    <h3>Booking Confirmed!</h3>
+    <p>Your assistant has been notified and will arrive at the scheduled time. A confirmation SMS has been sent.</p>
+    <div class="success-detail">
+      <div class="sd-row"><span>Booking ID</span><span>#EE-2841</span></div>
+      <div class="sd-row"><span>Service</span><span>Hospital Visit</span></div>
+      <div class="sd-row"><span>Assistant</span><span>Ravi Kumar</span></div>
+      <div class="sd-row"><span>Date & Time</span><span>Jan 20, 10:00 AM</span></div>
+      <div class="sd-row"><span>Total (pay after)</span><span>₹480</span></div>
+    </div>
+    <button class="btn-primary" style="width:100%;font-size:17px;" onclick="closeSuccess();showPage('dashboard')">View My Bookings</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
