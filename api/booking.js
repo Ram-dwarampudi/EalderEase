@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   try {
     await client.connect();
     const db = client.db('elderease');
-    const { elderName, age, address, emergency, service, date, time, instructions, amount } = req.body;
+    const { elderName, age, address, emergency, service, date, time, instructions, amount, userPhone } = req.body;
     if (!elderName || !service || !date) return res.status(400).json({ error: 'Missing required fields' });
     const booking = {
       bookingId: 'EE-' + Math.floor(Math.random() * 9000 + 1000),
