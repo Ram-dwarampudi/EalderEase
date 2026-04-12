@@ -363,3 +363,81 @@ document.addEventListener('DOMContentLoaded', function () {
   initHeroButtons();
   initFormSync();
 });
+
+// ===== MONGODB FORM WIRING =====
+
+// LOGIN
+document.querySelector('.auth-btn').addEventListener('click', async function() {
+  const input = document.querySelectorAll('.auth-form input');
+  const phone = input[0].value.trim();
+  const password = input[1].value.trim();
+  if (!phone || !password) { alert('Please enter phone and password'); return; }
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
+      showPage('dashboard');
+    } else {
+      alert(data.error || 'Login failed');
+    }
+  } catch(e) {
+    alert('Something went wrong. Try again.');
+  }
+});
+
+// REGISTER
+document.querySelector('.auth-toggle button').addEventListener('click', async function() {
+  const input = document.querySelectorAll('.auth-form input');
+  const phone = input[0].value.trim();
+  const password = input[1].value.trim();
+  if (!phone || !password) { alert('Please enter phone and password'); return; }
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: phone, phone, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert('Registered successfully! Please sign in.');
+    } else {
+      alert(data.error || 'Registration failed');
+    }
+  } catch(e) {
+    alert('Something went wrong. Try again.');
+  }
+});
+
+// BOOKING
+document.querySelector('.btn-book').addEventListener('click', async function() {
+  const elderName = document.querySelector('.form-section input[placeholder="e.g. Ramaiah Garu"]')?.value.trim();
+  const age = document.querySelectorAll('.form-section input[type="number"]')[0]?.value;
+  const address = document.querySelectorAll('.form-section input[type="text"]')[2]?.value.trim();
+  const emergency = document.querySelector('input[type="tel"]')?.value.trim();
+  const service = document.querySelector('.service-option.selected .so-text strong')?.textContent;
+  const date = document.querySelector('input[type="date"]')?.value;
+  const time = document.querySelector('.timeslot.selected')?.textContent;
+  const instructions = document.querySelector('textarea')?.value.trim();
+  const amount = 480;
+  if (!elderName || !date) { alert('Please fill elder name and date'); return; }
+  try {
+    const res = await fetch('/api/booking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ elderName, age, address, emergency, service, date, time, instructions, amount })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showSuccess();
+    } else {
+      alert(data.error || 'Booking failed');
+    }
+  } catch(e) {
+    alert('Something went wrong. Try again.');
+  }
+});
