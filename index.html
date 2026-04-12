@@ -6,23 +6,100 @@
 <title>ElderEase – Care at Your Doorstep</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="elderease_styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+#page-admin{display:none}
+#page-admin.active{display:flex;min-height:calc(100vh - 72px)}
+.admin-sidebar-panel{width:210px;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:72px;height:calc(100vh - 72px);overflow-y:auto}
+.admin-sidebar-section{padding:12px 12px 4px;font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px}
+.admin-nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:all .18s;font-size:14px;font-weight:500;color:var(--text-mid);margin:2px 8px;user-select:none}
+.admin-nav-item:hover{background:var(--sage-light);color:var(--sage)}
+.admin-nav-item.active{background:var(--sage);color:#fff}
+.admin-nav-item .ni{font-size:15px;width:18px;text-align:center}
+.admin-sidebar-bottom{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
+.admin-badge-pill{background:var(--sage-light);color:var(--sage);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600}
+.admin-main-area{flex:1;overflow-y:auto}
+.admin-topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 1.5rem;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:72px;z-index:30}
+.admin-topbar h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:700}
+.admin-content{padding:1.5rem}
+.atab{display:none}.atab.active{display:block}
+.acard{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:18px}
+.acard-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.acard-header h3{font-size:15px;font-weight:600}
+.acard-body{padding:16px 20px}
+.a-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.a-stat-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:16px}
+.a-stat-card.accent{background:var(--sage);border-color:var(--sage)}
+.a-stat-card.accent .asl,.a-stat-card.accent .asn,.a-stat-card.accent .ass{color:#fff}
+.asl{font-size:12px;color:var(--text-mid);margin-bottom:4px;font-weight:500}
+.asn{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text)}
+.ass{font-size:11px;color:var(--text-light);margin-top:3px}
+.atbl{width:100%;border-collapse:collapse}
+.atbl th{text-align:left;padding:10px 16px;font-size:11px;font-weight:600;color:var(--text-mid);background:var(--bg);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}
+.atbl td{padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);vertical-align:middle}
+.atbl tr:last-child td{border-bottom:none}
+.atbl tr:hover td{background:#fafaf5}
+.abadge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block}
+.ab-pending{background:var(--amber-light);color:var(--amber)}
+.ab-progress{background:var(--teal-light);color:var(--teal)}
+.ab-done{background:var(--sage-light);color:var(--sage)}
+.ab-cancelled{background:var(--coral-light);color:var(--coral)}
+.ab-available{background:var(--sage-light);color:var(--sage)}
+.ab-duty{background:var(--teal-light);color:var(--teal)}
+.ab-off{background:var(--coral-light);color:var(--coral)}
+.abtn{border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s}
+.abtn-p{background:var(--sage);color:#fff}.abtn-p:hover{background:var(--teal)}
+.abtn-s{background:var(--bg);color:var(--text-mid);border:1px solid var(--border)}.abtn-s:hover{border-color:var(--sage);color:var(--sage)}
+.abtn-d{background:var(--coral-light);color:var(--coral);border:1px solid #F0997B}.abtn-d:hover{background:var(--coral);color:#fff}
+.abtn:disabled{opacity:.5;cursor:default}
+.afg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.afg label{font-size:12px;font-weight:600;color:var(--text)}
+.afg input,.afg select,.afg textarea{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:border-color .2s;width:100%}
+.afg input:focus,.afg select:focus,.afg textarea:focus{outline:none;border-color:var(--sage)}
+.afrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.amodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:500}
+.amodal-overlay.open{display:flex}
+.amodal{background:#fff;border-radius:var(--radius);padding:26px;max-width:480px;width:92%;max-height:88vh;overflow-y:auto}
+.amodal h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:16px}
+.amodal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.atoolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.asearch{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);width:190px}
+.asearch:focus{outline:none;border-color:var(--sage)}
+.afilter{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);cursor:pointer}
+.a2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.aav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.av-g{background:var(--sage-light);color:var(--sage)}.av-a{background:var(--amber-light);color:var(--amber)}.av-t{background:var(--teal-light);color:var(--teal)}.av-c{background:var(--coral-light);color:var(--coral)}
+.adot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.adot-g{background:var(--sage-mid)}.adot-a{background:var(--amber-mid)}.adot-r{background:#E24B4A}
+.achart{position:relative;width:100%;height:230px}
+.atoggle-wrap{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.atoggle{position:relative;width:40px;height:22px;cursor:pointer}
+.atoggle input{opacity:0;width:0;height:0}
+.atoggle-slider{position:absolute;inset:0;background:var(--border);border-radius:22px;transition:.2s}
+.atoggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.atoggle input:checked+.atoggle-slider{background:var(--sage)}
+.atoggle input:checked+.atoggle-slider::before{transform:translateX(18px)}
+.astars{color:var(--amber-mid);font-size:13px}
+.anotif{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.anotif:last-child{border-bottom:none}
+.anotif-dot{width:9px;height:9px;border-radius:50%;background:var(--sage);margin-top:4px;flex-shrink:0}
+.anotif-dot.unread{background:var(--amber-mid)}
+</style>
 </head>
 <body>
+
 <nav>
-  <div class="logo">
-    <div class="logo-icon">🌿</div>
-    ElderEase
-  </div>
+  <div class="logo" onclick="showPage('home')" style="cursor:pointer"><div class="logo-icon">🌿</div>ElderEase</div>
   <div class="nav-links">
     <button onclick="showPage('home')" id="nav-home" class="active">Home</button>
     <button onclick="showPage('booking')" id="nav-booking">Book a Service</button>
     <button onclick="showPage('dashboard')" id="nav-dashboard">My Bookings</button>
-    <button onclick="window.open('elderease_admin.html','_blank')" id="nav-admin">Admin Panel</button>
+    <button onclick="showPage('admin')" id="nav-admin">Admin Panel</button>
     <button onclick="showPage('login')" id="nav-login" class="nav-cta">Sign In</button>
   </div>
 </nav>
 
-<!-- ===== HOME PAGE ===== -->
+<!-- HOME -->
 <div id="page-home" class="page active">
   <section class="hero">
     <div>
@@ -36,129 +113,47 @@
     </div>
     <div class="hero-visual">
       <div class="stat-row">
-        <div class="stat-card">
-          <div class="num">98%</div>
-          <div class="lbl">Satisfaction rate</div>
-        </div>
-        <div class="stat-card">
-          <div class="num">150+</div>
-          <div class="lbl">Trained assistants</div>
-        </div>
+        <div class="stat-card"><div class="num">98%</div><div class="lbl">Satisfaction rate</div></div>
+        <div class="stat-card"><div class="num">150+</div><div class="lbl">Trained assistants</div></div>
       </div>
       <div class="assistant-preview">
         <div class="avatar av-green">RK</div>
-        <div class="assistant-info">
-          <strong>Ravi Kumar</strong>
-          <span>Hospital & Medicine specialist • ⭐ 4.9</span>
-        </div>
+        <div class="assistant-info"><strong>Ravi Kumar</strong><span>Hospital & Medicine specialist • ⭐ 4.9</span></div>
         <span class="badge-avail">Available today</span>
       </div>
       <div class="assistant-preview">
         <div class="avatar av-amber">SM</div>
-        <div class="assistant-info">
-          <strong>Sunita Mishra</strong>
-          <span>Grocery & Errands expert • ⭐ 4.8</span>
-        </div>
+        <div class="assistant-info"><strong>Sunita Mishra</strong><span>Grocery & Errands expert • ⭐ 4.8</span></div>
         <span class="badge-avail">Available today</span>
       </div>
     </div>
   </section>
-
   <section class="section">
-    <div class="section-header">
-      <h2>Services We Provide</h2>
-      <p>Simple booking for all the tasks that become difficult with age — we're here to help</p>
-    </div>
+    <div class="section-header"><h2>Services We Provide</h2><p>Simple booking for all the tasks that become difficult with age</p></div>
     <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon si-teal">🏥</div>
-        <h3>Hospital Visits</h3>
-        <p>Our assistant accompanies your elder to appointments, ensures they're comfortable, and reports back to family.</p>
-        <div class="service-price">From ₹300 / visit</div>
-      </div>
-      <div class="service-card">
-        <div class="service-icon si-green">💊</div>
-        <h3>Medicine Pickup</h3>
-        <p>Prescription medicines collected and delivered safely from your trusted pharmacy, no waiting needed.</p>
-        <div class="service-price">From ₹150 / trip</div>
-      </div>
-      <div class="service-card">
-        <div class="service-icon si-amber">🛒</div>
-        <h3>Grocery Shopping</h3>
-        <p>Fresh vegetables, groceries, and household essentials bought and delivered as per your list.</p>
-        <div class="service-price">From ₹200 / trip</div>
-      </div>
-      <div class="service-card">
-        <div class="service-icon si-coral">📋</div>
-        <h3>Daily Errands</h3>
-        <p>Bank visits, bill payments, postal work, or any general task that requires going out — we handle it.</p>
-        <div class="service-price">From ₹250 / errand</div>
-      </div>
+      <div class="service-card"><div class="service-icon si-teal">🏥</div><h3>Hospital Visits</h3><p>Our assistant accompanies your elder to appointments, ensures they're comfortable, and reports back to family.</p><div class="service-price">From ₹300 / visit</div></div>
+      <div class="service-card"><div class="service-icon si-green">💊</div><h3>Medicine Pickup</h3><p>Prescription medicines collected and delivered safely from your trusted pharmacy, no waiting needed.</p><div class="service-price">From ₹150 / trip</div></div>
+      <div class="service-card"><div class="service-icon si-amber">🛒</div><h3>Grocery Shopping</h3><p>Fresh vegetables, groceries, and household essentials bought and delivered as per your list.</p><div class="service-price">From ₹200 / trip</div></div>
+      <div class="service-card"><div class="service-icon si-coral">📋</div><h3>Daily Errands</h3><p>Bank visits, bill payments, postal work, or any general task that requires going out — we handle it.</p><div class="service-price">From ₹250 / errand</div></div>
     </div>
   </section>
-
   <section class="section how-bg">
-    <div class="section-header">
-      <h2>How It Works</h2>
-      <p>Book help for your loved one in under 3 minutes</p>
-    </div>
+    <div class="section-header"><h2>How It Works</h2><p>Book help for your loved one in under 3 minutes</p></div>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Register & Sign In</h3>
-        <p>Create an account for yourself or your elderly family member in minutes</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Choose a Service</h3>
-        <p>Select what kind of help is needed and pick a convenient time slot</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Get Matched</h3>
-        <p>We assign a trained, verified assistant available in your area</p>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <h3>Track & Pay</h3>
-        <p>Follow the booking status live and pay securely after the service</p>
-      </div>
+      <div class="step"><div class="step-num">1</div><h3>Register & Sign In</h3><p>Create an account in minutes</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Choose a Service</h3><p>Select what kind of help is needed</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Get Matched</h3><p>We assign a verified assistant</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Track & Pay</h3><p>Follow status live and pay after</p></div>
     </div>
   </section>
-
   <section class="section">
-    <div class="section-header">
-      <h2>What Families Say</h2>
-      <p>Real reviews from people who trust ElderEase every day</p>
-    </div>
+    <div class="section-header"><h2>What Families Say</h2><p>Real reviews from people who trust ElderEase every day</p></div>
     <div class="testimonials">
-      <div class="testimonial">
-        <div class="stars">★★★★★</div>
-        <blockquote>"My 78-year-old mother used to skip her checkups because no one could accompany her. ElderEase changed everything — Ravi is so patient and kind."</blockquote>
-        <div class="reviewer">
-          <div class="avatar av-green" style="width:44px;height:44px;font-size:16px;">PS</div>
-          <div><strong>Priya Sharma</strong><span>Daughter, Hyderabad</span></div>
-        </div>
-      </div>
-      <div class="testimonial">
-        <div class="stars">★★★★★</div>
-        <blockquote>"I live in Bangalore and my parents are in Vijayawada. Having ElderEase gives me peace of mind. The live updates feature is a blessing."</blockquote>
-        <div class="reviewer">
-          <div class="avatar av-teal" style="width:44px;height:44px;font-size:16px;">AK</div>
-          <div><strong>Arjun Kumar</strong><span>Son, Bangalore</span></div>
-        </div>
-      </div>
-      <div class="testimonial">
-        <div class="stars">★★★★☆</div>
-        <blockquote>"The booking is so simple even I can do it myself! Large buttons, clear steps — and Sunita always brings exactly what's on my list."</blockquote>
-        <div class="reviewer">
-          <div class="avatar av-amber" style="width:44px;height:44px;font-size:16px;">VR</div>
-          <div><strong>Venkateswara Rao</strong><span>Elder member, 74 years</span></div>
-        </div>
-      </div>
+      <div class="testimonial"><div class="stars">★★★★★</div><blockquote>"My 78-year-old mother used to skip her checkups. ElderEase changed everything — Ravi is so patient and kind."</blockquote><div class="reviewer"><div class="avatar av-green" style="width:44px;height:44px;font-size:16px">PS</div><div><strong>Priya Sharma</strong><span>Daughter, Hyderabad</span></div></div></div>
+      <div class="testimonial"><div class="stars">★★★★★</div><blockquote>"I live in Bangalore and my parents are in Vijayawada. ElderEase gives me peace of mind every day."</blockquote><div class="reviewer"><div class="avatar av-teal" style="width:44px;height:44px;font-size:16px">AK</div><div><strong>Arjun Kumar</strong><span>Son, Bangalore</span></div></div></div>
+      <div class="testimonial"><div class="stars">★★★★☆</div><blockquote>"The booking is so simple even I can do it myself! Sunita always brings exactly what's on my list."</blockquote><div class="reviewer"><div class="avatar av-amber" style="width:44px;height:44px;font-size:16px">VR</div><div><strong>Venkateswara Rao</strong><span>Elder member, 74 years</span></div></div></div>
     </div>
   </section>
-
   <footer class="footer-bar">
     <div class="fl">🌿 ElderEase</div>
     <div>© 2025 ElderEase. Care at your doorstep. | Privacy Policy | Terms of Service</div>
@@ -166,7 +161,7 @@
   </footer>
 </div>
 
-<!-- ===== BOOKING PAGE ===== -->
+<!-- BOOKING -->
 <div id="page-booking" class="page">
   <div class="booking-container">
     <h2>Book an Assistant</h2>
@@ -180,69 +175,35 @@
     <div class="form-section">
       <h3>Select a Service</h3>
       <div class="service-select-grid">
-        <div class="service-option selected" onclick="selectService(this)">
-          <span class="so-icon">🏥</span>
-          <div class="so-text"><strong>Hospital Visit</strong><span>Accompany to appointment</span></div>
-        </div>
-        <div class="service-option" onclick="selectService(this)">
-          <span class="so-icon">💊</span>
-          <div class="so-text"><strong>Medicine Pickup</strong><span>From pharmacy</span></div>
-        </div>
-        <div class="service-option" onclick="selectService(this)">
-          <span class="so-icon">🛒</span>
-          <div class="so-text"><strong>Grocery Shopping</strong><span>With your list</span></div>
-        </div>
-        <div class="service-option" onclick="selectService(this)">
-          <span class="so-icon">📋</span>
-          <div class="so-text"><strong>Daily Errand</strong><span>Bank, bills, etc.</span></div>
-        </div>
+        <div class="service-option selected" onclick="selectService(this)"><span class="so-icon">🏥</span><div class="so-text"><strong>Hospital Visit</strong><span>Accompany to appointment</span></div></div>
+        <div class="service-option" onclick="selectService(this)"><span class="so-icon">💊</span><div class="so-text"><strong>Medicine Pickup</strong><span>From pharmacy</span></div></div>
+        <div class="service-option" onclick="selectService(this)"><span class="so-icon">🛒</span><div class="so-text"><strong>Grocery Shopping</strong><span>With your list</span></div></div>
+        <div class="service-option" onclick="selectService(this)"><span class="so-icon">📋</span><div class="so-text"><strong>Daily Errand</strong><span>Bank, bills, etc.</span></div></div>
       </div>
     </div>
     <div class="form-section">
       <h3>Patient Details</h3>
       <div class="form-row">
-        <div class="form-group">
-          <label>Elder's Full Name</label>
-          <input type="text" placeholder="e.g. Ramaiah Garu" value="Venkata Ramaiah">
-        </div>
-        <div class="form-group">
-          <label>Age</label>
-          <input type="number" placeholder="Age" value="72">
-        </div>
+        <div class="form-group"><label>Elder's Full Name</label><input type="text" placeholder="e.g. Ramaiah Garu" value="Venkata Ramaiah"></div>
+        <div class="form-group"><label>Age</label><input type="number" placeholder="Age" value="72"></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Address</label>
-          <input type="text" placeholder="Pick-up address" value="12-3 MG Road, Vijayawada">
-        </div>
-        <div class="form-group">
-          <label>Emergency Contact</label>
-          <input type="tel" placeholder="Family phone number" value="+91 98765 43210">
-        </div>
+        <div class="form-group"><label>Address</label><input type="text" value="12-3 MG Road, Vijayawada"></div>
+        <div class="form-group"><label>Emergency Contact</label><input type="tel" value="+91 98765 43210"></div>
       </div>
-      <div class="form-group">
-        <label>Special Instructions</label>
-        <textarea rows="3" placeholder="Any medical conditions, preferred assistant, special notes...">Please speak slowly, carries a walking stick. Appointment at Apollo Hospital at 10 AM.</textarea>
-      </div>
+      <div class="form-group"><label>Special Instructions</label><textarea rows="3">Please speak slowly, carries a walking stick. Appointment at Apollo Hospital at 10 AM.</textarea></div>
     </div>
     <div class="form-section">
       <h3>Select Date & Time Slot</h3>
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label>Date</label>
-        <input type="date" value="2025-01-20">
-      </div>
-      <label style="font-size:15px;font-weight:500;color:var(--text);display:block;margin-bottom:12px;">Available Slots</label>
+      <div class="form-group" style="margin-bottom:20px"><label>Date</label><input type="date"></div>
+      <label style="font-size:15px;font-weight:500;color:var(--text);display:block;margin-bottom:12px">Available Slots</label>
       <div class="timeslots">
-        <div class="timeslot unavailable">8:00 AM</div>
-        <div class="timeslot unavailable">9:00 AM</div>
-        <div class="timeslot selected">10:00 AM</div>
-        <div class="timeslot">11:00 AM</div>
-        <div class="timeslot">12:00 PM</div>
-        <div class="timeslot unavailable">1:00 PM</div>
-        <div class="timeslot">2:00 PM</div>
-        <div class="timeslot">3:00 PM</div>
+        <div class="timeslot unavailable">8:00 AM</div><div class="timeslot unavailable">9:00 AM</div>
+        <div class="timeslot selected">10:00 AM</div><div class="timeslot">11:00 AM</div>
+        <div class="timeslot">12:00 PM</div><div class="timeslot unavailable">1:00 PM</div>
+        <div class="timeslot">2:00 PM</div><div class="timeslot">3:00 PM</div>
       </div>
-      <p style="font-size:13px;color:var(--text-light);margin-top:12px;">Gray slots are already booked. Select a green slot to proceed.</p>
+      <p style="font-size:13px;color:var(--text-light);margin-top:12px">Gray slots are already booked.</p>
     </div>
     <div class="form-section">
       <h3>Cost Summary</h3>
@@ -254,155 +215,231 @@
       </div>
       <button class="btn-book" onclick="showSuccess()">✅ Confirm Booking</button>
     </div>
-    <div class="emergency-box">
-      <span class="em-icon">🚨</span>
-      <div>
-        <p><strong>Need immediate help?</strong>Call our emergency line for urgent assistance: <strong style="font-size:17px;">1800-ELDER-HELP</strong> (available 24/7)</p>
-      </div>
-    </div>
+    <div class="emergency-box"><span class="em-icon">🚨</span><div><p><strong>Need immediate help?</strong> Call: <strong style="font-size:17px">1800-ELDER-HELP</strong> (24/7)</p></div></div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD PAGE ===== -->
+<!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
   <div class="dashboard">
     <div class="dash-header">
-      <div>
-        <h2>Good morning, Priya 👋</h2>
-        <p>Manage bookings for Venkata Ramaiah Garu</p>
-      </div>
+      <div><h2>Good morning, Priya 👋</h2><p>Manage bookings for Venkata Ramaiah Garu</p></div>
       <button class="btn-primary" onclick="showPage('booking')">+ New Booking</button>
     </div>
     <div class="dash-stats">
-      <div class="ds-card accent">
-        <div class="ds-icon">📅</div>
-        <div class="ds-num">2</div>
-        <div class="ds-label">Upcoming bookings</div>
-      </div>
-      <div class="ds-card">
-        <div class="ds-icon">✅</div>
-        <div class="ds-num">18</div>
-        <div class="ds-label">Completed services</div>
-      </div>
-      <div class="ds-card">
-        <div class="ds-icon">⭐</div>
-        <div class="ds-num">4.9</div>
-        <div class="ds-label">Average rating given</div>
-      </div>
-      <div class="ds-card">
-        <div class="ds-icon">💰</div>
-        <div class="ds-num">₹4,820</div>
-        <div class="ds-label">Total spent</div>
-      </div>
+      <div class="ds-card accent"><div class="ds-icon">📅</div><div class="ds-num">2</div><div class="ds-label">Upcoming bookings</div></div>
+      <div class="ds-card"><div class="ds-icon">✅</div><div class="ds-num">18</div><div class="ds-label">Completed services</div></div>
+      <div class="ds-card"><div class="ds-icon">⭐</div><div class="ds-num">4.9</div><div class="ds-label">Average rating given</div></div>
+      <div class="ds-card"><div class="ds-icon">💰</div><div class="ds-num">₹4,820</div><div class="ds-label">Total spent</div></div>
     </div>
     <div class="bookings-table">
-      <div class="bt-header">
-        <h3>All Bookings</h3>
-        <div class="bt-filter">
-          <button class="filter-btn active">All</button>
-          <button class="filter-btn">Upcoming</button>
-          <button class="filter-btn">Completed</button>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Booking ID</th><th>Service</th><th>Assistant</th><th>Date & Time</th><th>Amount</th><th>Status</th><th>Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>#EE-2841</td>
-            <td>🏥 Hospital Visit</td>
-            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px;">RK</div> Ravi Kumar</div></td>
-            <td>Jan 20, 10:00 AM</td>
-            <td>₹480</td>
-            <td><span class="status-badge s-pending">Pending</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td>#EE-2797</td>
-            <td>💊 Medicine Pickup</td>
-            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px;">SM</div> Sunita Mishra</div></td>
-            <td>Jan 18, 2:00 PM</td>
-            <td>₹180</td>
-            <td><span class="status-badge s-progress">In Progress</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td>#EE-2701</td>
-            <td>🛒 Grocery Shopping</td>
-            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-teal" style="width:32px;height:32px;font-size:12px;">MR</div> Mohan Rao</div></td>
-            <td>Jan 15, 9:00 AM</td>
-            <td>₹230</td>
-            <td><span class="status-badge s-done">Completed</span></td>
-            <td><span class="rating-stars">★★★★★</span></td>
-          </tr>
-          <tr>
-            <td>#EE-2654</td>
-            <td>📋 Daily Errand</td>
-            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px;">RK</div> Ravi Kumar</div></td>
-            <td>Jan 10, 11:00 AM</td>
-            <td>₹280</td>
-            <td><span class="status-badge s-done">Completed</span></td>
-            <td><span class="rating-stars">★★★★☆</span></td>
-          </tr>
-          <tr>
-            <td>#EE-2590</td>
-            <td>🏥 Hospital Visit</td>
-            <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px;">SM</div> Sunita Mishra</div></td>
-            <td>Jan 5, 8:00 AM</td>
-            <td>₹510</td>
-            <td><span class="status-badge s-cancelled">Cancelled</span></td>
-            <td>—</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="bt-header"><h3>All Bookings</h3><div class="bt-filter"><button class="filter-btn active">All</button><button class="filter-btn">Upcoming</button><button class="filter-btn">Completed</button></div></div>
+      <table><thead><tr><th>Booking ID</th><th>Service</th><th>Assistant</th><th>Date & Time</th><th>Amount</th><th>Status</th><th>Rating</th></tr></thead>
+      <tbody id="bookings-tbody">
+        <tr><td>#EE-2841</td><td>🏥 Hospital Visit</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px">RK</div>Ravi Kumar</div></td><td>Jan 20, 10:00 AM</td><td>₹480</td><td><span class="status-badge s-pending">Pending</span></td><td>—</td></tr>
+        <tr><td>#EE-2797</td><td>💊 Medicine Pickup</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px">SM</div>Sunita Mishra</div></td><td>Jan 18, 2:00 PM</td><td>₹180</td><td><span class="status-badge s-progress">In Progress</span></td><td>—</td></tr>
+        <tr><td>#EE-2701</td><td>🛒 Grocery Shopping</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-teal" style="width:32px;height:32px;font-size:12px">MR</div>Mohan Rao</div></td><td>Jan 15, 9:00 AM</td><td>₹230</td><td><span class="status-badge s-done">Completed</span></td><td><span class="rating-stars">★★★★★</span></td></tr>
+        <tr><td>#EE-2654</td><td>📋 Daily Errand</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px">RK</div>Ravi Kumar</div></td><td>Jan 10, 11:00 AM</td><td>₹280</td><td><span class="status-badge s-done">Completed</span></td><td><span class="rating-stars">★★★★☆</span></td></tr>
+        <tr><td>#EE-2590</td><td>🏥 Hospital Visit</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px">SM</div>Sunita Mishra</div></td><td>Jan 5, 8:00 AM</td><td>₹510</td><td><span class="status-badge s-cancelled">Cancelled</span></td><td>—</td></tr>
+      </tbody></table>
     </div>
   </div>
 </div>
 
-
-<!-- ===== LOGIN PAGE ===== -->
+<!-- LOGIN -->
 <div id="page-login" class="page">
   <div class="auth-container">
     <div class="auth-card">
-      <div class="auth-logo">
-        <div class="logo" style="justify-content:center;margin-bottom:8px;">
-          <div class="logo-icon">🌿</div> ElderEase
-        </div>
-      </div>
-      <h2>Welcome Back</h2>
-      <p class="auth-sub">Sign in to manage your elder's care</p>
+      <div class="auth-logo"><div class="logo" style="justify-content:center;margin-bottom:8px"><div class="logo-icon">🌿</div>ElderEase</div></div>
+      <h2>Welcome Back</h2><p class="auth-sub">Sign in to manage your elder's care</p>
       <div class="auth-form">
-        <div class="form-group">
-          <label>Phone number or Email</label>
-          <input type="text" placeholder="+91 98765 43210 or email@example.com">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" placeholder="Your password">
-        </div>
+        <div class="form-group"><label>Phone number or Email</label><input type="text" placeholder="+91 98765 43210 or email@example.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" placeholder="Your password"></div>
         <button class="auth-btn" onclick="showPage('dashboard')">Sign In</button>
       </div>
-      <div class="auth-toggle">
-        <span>Don't have an account? </span>
-        <button>Register here</button>
+      <div class="auth-toggle"><span>Don't have an account? </span><button>Register here</button></div>
+      <div class="family-note"><strong>Registering for a family member?</strong> You can manage bookings on behalf of your elderly relative.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div id="page-admin" class="page">
+  <aside class="admin-sidebar-panel">
+    <div class="admin-sidebar-section">Main</div>
+    <div class="admin-nav-item active" onclick="showAdminTab('overview')"><span class="ni">📊</span> Overview</div>
+    <div class="admin-nav-item" onclick="showAdminTab('bookings')"><span class="ni">📅</span> Bookings</div>
+    <div class="admin-nav-item" onclick="showAdminTab('assistants')"><span class="ni">👥</span> Assistants</div>
+    <div class="admin-nav-item" onclick="showAdminTab('users')"><span class="ni">👴</span> Users</div>
+    <div class="admin-sidebar-section">Finance</div>
+    <div class="admin-nav-item" onclick="showAdminTab('payments')"><span class="ni">💰</span> Payments</div>
+    <div class="admin-sidebar-section">Engagement</div>
+    <div class="admin-nav-item" onclick="showAdminTab('reviews')"><span class="ni">⭐</span> Reviews</div>
+    <div class="admin-nav-item" onclick="showAdminTab('notifications')"><span class="ni">🔔</span> Notifications</div>
+    <div class="admin-sidebar-section">System</div>
+    <div class="admin-nav-item" onclick="showAdminTab('settings')"><span class="ni">⚙️</span> Settings</div>
+    <div class="admin-sidebar-bottom"><div class="admin-badge-pill">🔐 Admin Panel</div></div>
+  </aside>
+  <div class="admin-main-area">
+    <div class="admin-topbar">
+      <h2 id="admin-page-title">Overview</h2>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="admin-date" style="font-size:12px;color:var(--text-mid)"></span>
+        <button class="abtn abtn-p" id="admin-action-btn" onclick="adminTopAction()">+ Add Booking</button>
       </div>
-      <div class="family-note">
-        <strong>Registering for a family member?</strong>
-        You can create an account and manage bookings on behalf of your elderly relative. Select "Register as Family Member" during sign-up.
+    </div>
+    <div class="admin-content">
+
+      <!-- OVERVIEW TAB -->
+      <div class="atab active" id="atab-overview">
+        <div class="a-stat-grid" id="a-overview-stats"></div>
+        <div class="a2col">
+          <div class="acard"><div class="acard-header"><h3>Bookings This Week</h3></div><div class="acard-body"><div class="achart"><canvas id="ac-bookings" role="img" aria-label="Bookings this week"></canvas></div></div></div>
+          <div class="acard"><div class="acard-header"><h3>Monthly Revenue</h3></div><div class="acard-body"><div class="achart"><canvas id="ac-revenue" role="img" aria-label="Monthly revenue"></canvas></div></div></div>
+        </div>
+        <div class="a2col">
+          <div class="acard"><div class="acard-header"><h3>Services Breakdown</h3></div><div class="acard-body" style="display:flex;align-items:center;gap:18px"><div class="achart" style="height:170px;width:170px;flex-shrink:0"><canvas id="ac-services" role="img" aria-label="Services breakdown"></canvas></div><div id="a-svc-legend" style="font-size:12px;display:flex;flex-direction:column;gap:8px"></div></div></div>
+          <div class="acard"><div class="acard-header"><h3>Recent Activity</h3></div><div class="acard-body" id="a-recent" style="max-height:200px;overflow-y:auto"></div></div>
+        </div>
       </div>
+
+      <!-- BOOKINGS TAB -->
+      <div class="atab" id="atab-bookings">
+        <div class="atoolbar">
+          <input class="asearch" type="text" placeholder="Search bookings..." oninput="aRenderBookings()" id="a-bsearch">
+          <select class="afilter" onchange="aRenderBookings()" id="a-bstatus"><option value="">All Status</option><option>Pending</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select>
+          <select class="afilter" onchange="aRenderBookings()" id="a-bservice"><option value="">All Services</option><option>Hospital Visit</option><option>Medicine Pickup</option><option>Grocery Shopping</option><option>Daily Errand</option></select>
+          <button class="abtn abtn-p" onclick="aOpenBookingModal()">+ New Booking</button>
+        </div>
+        <div class="acard"><div class="acard-body" style="padding:0;overflow-x:auto"><table class="atbl"><thead><tr><th>ID</th><th>User</th><th>Service</th><th>Assistant</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="a-btbody"></tbody></table></div></div>
+      </div>
+
+      <!-- ASSISTANTS TAB -->
+      <div class="atab" id="atab-assistants">
+        <div class="atoolbar">
+          <input class="asearch" type="text" placeholder="Search assistants..." oninput="aRenderAssistants()" id="a-asearch">
+          <select class="afilter" onchange="aRenderAssistants()" id="a-astatus"><option value="">All Status</option><option>Available</option><option>On Duty</option><option>Off Duty</option></select>
+          <button class="abtn abtn-p" onclick="aOpenAssistantModal()">+ Add Assistant</button>
+        </div>
+        <div class="acard"><div class="acard-body" style="padding:0;overflow-x:auto"><table class="atbl"><thead><tr><th>Assistant</th><th>Speciality</th><th>Zone</th><th>Tasks</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead><tbody id="a-atbody"></tbody></table></div></div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div class="atab" id="atab-users">
+        <div class="atoolbar">
+          <input class="asearch" type="text" placeholder="Search users..." oninput="aRenderUsers()" id="a-usearch">
+          <select class="afilter" onchange="aRenderUsers()" id="a-utype"><option value="">All Types</option><option>Family Member</option><option>Elder</option></select>
+          <button class="abtn abtn-p" onclick="aOpenUserModal()">+ Add User</button>
+        </div>
+        <div class="acard"><div class="acard-body" style="padding:0;overflow-x:auto"><table class="atbl"><thead><tr><th>User</th><th>Type</th><th>Phone</th><th>City</th><th>Bookings</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="a-utbody"></tbody></table></div></div>
+      </div>
+
+      <!-- PAYMENTS TAB -->
+      <div class="atab" id="atab-payments">
+        <div class="a-stat-grid" id="a-pay-stats" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div class="acard" style="margin-bottom:16px"><div class="acard-header"><h3>Monthly Revenue</h3></div><div class="acard-body"><div class="achart"><canvas id="ac-payments" role="img" aria-label="Monthly revenue"></canvas></div></div></div>
+        <div class="atoolbar">
+          <input class="asearch" type="text" placeholder="Search payments..." oninput="aRenderPayments()" id="a-psearch">
+          <select class="afilter" onchange="aRenderPayments()" id="a-pstatus"><option value="">All</option><option>Paid</option><option>Pending</option><option>Refunded</option></select>
+        </div>
+        <div class="acard"><div class="acard-body" style="padding:0;overflow-x:auto"><table class="atbl"><thead><tr><th>Payment ID</th><th>Booking</th><th>User</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr></thead><tbody id="a-ptbody"></tbody></table></div></div>
+      </div>
+
+      <!-- REVIEWS TAB -->
+      <div class="atab" id="atab-reviews">
+        <div class="a-stat-grid" id="a-rev-stats" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px"></div>
+        <div class="a2col" style="margin-bottom:16px">
+          <div class="acard"><div class="acard-header"><h3>Rating Distribution</h3></div><div class="acard-body" id="a-rating-bars"></div></div>
+          <div class="acard"><div class="acard-header"><h3>Top Rated Assistants</h3></div><div class="acard-body" id="a-top-assist"></div></div>
+        </div>
+        <div class="atoolbar">
+          <input class="asearch" type="text" placeholder="Search reviews..." oninput="aRenderReviews()" id="a-rsearch">
+          <select class="afilter" onchange="aRenderReviews()" id="a-rrating"><option value="">All Ratings</option><option value="5">5 Stars</option><option value="4">4 Stars</option><option value="3">3 Stars</option></select>
+        </div>
+        <div class="acard"><div class="acard-body" style="padding:0;overflow-x:auto"><table class="atbl"><thead><tr><th>User</th><th>Assistant</th><th>Service</th><th>Rating</th><th>Comment</th><th>Date</th></tr></thead><tbody id="a-rtbody"></tbody></table></div></div>
+      </div>
+
+      <!-- NOTIFICATIONS TAB -->
+      <div class="atab" id="atab-notifications">
+        <div class="a2col">
+          <div>
+            <div class="acard"><div class="acard-header"><h3>Send Notification</h3></div><div class="acard-body">
+              <div class="afg"><label>Target Audience</label><select id="an-target"><option>All Users</option><option>Family Members</option><option>Elders</option><option>Assistants</option></select></div>
+              <div class="afg"><label>Type</label><select id="an-type"><option>Announcement</option><option>Reminder</option><option>Alert</option><option>Promotion</option></select></div>
+              <div class="afg"><label>Title</label><input type="text" id="an-title" placeholder="Notification title"></div>
+              <div class="afg"><label>Message</label><textarea id="an-message" rows="3" placeholder="Type your message..."></textarea></div>
+              <button class="abtn abtn-p" onclick="aSendNotif()" style="width:100%">Send Notification</button>
+            </div></div>
+          </div>
+          <div>
+            <div class="acard"><div class="acard-header"><h3>Sent Notifications</h3><button class="abtn abtn-s" onclick="aClearNotifs()">Clear All</button></div><div class="acard-body" id="an-list" style="max-height:360px;overflow-y:auto"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="atab" id="atab-settings">
+        <div class="a2col">
+          <div>
+            <div class="acard" style="margin-bottom:16px"><div class="acard-header"><h3>Platform Settings</h3></div><div class="acard-body">
+              <div class="afg"><label>Platform Name</label><input type="text" id="as-name"></div>
+              <div class="afg"><label>Support Email</label><input type="email" id="as-email"></div>
+              <div class="afg"><label>Emergency Helpline</label><input type="tel" id="as-phone"></div>
+              <div class="afg"><label>Platform Fee (₹)</label><input type="number" id="as-fee"></div>
+              <button class="abtn abtn-p" onclick="aSaveSettings()" style="width:100%">Save Settings</button>
+            </div></div>
+            <div class="acard"><div class="acard-header"><h3>Service Pricing</h3></div><div class="acard-body" id="as-pricing"></div></div>
+          </div>
+          <div>
+            <div class="acard" style="margin-bottom:16px"><div class="acard-header"><h3>Feature Toggles</h3></div><div class="acard-body" id="as-features"></div></div>
+            <div class="acard"><div class="acard-header"><h3>Danger Zone</h3></div><div class="acard-body">
+              <p style="font-size:12px;color:var(--text-mid);margin-bottom:12px">These actions cannot be undone.</p>
+              <button class="abtn abtn-d" style="width:100%;margin-bottom:8px" onclick="aResetDemo()">Reset to Demo Data</button>
+              <button class="abtn abtn-d" style="width:100%" onclick="aClearAll()">Clear All Data</button>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN MODALS -->
+  <div class="amodal-overlay" id="am-booking">
+    <div class="amodal">
+      <h2 id="am-booking-title">New Booking</h2>
+      <div class="afrow"><div class="afg"><label>User Name</label><input type="text" id="amb-user" placeholder="Elder's name"></div><div class="afg"><label>Service</label><select id="amb-service"><option>Hospital Visit</option><option>Medicine Pickup</option><option>Grocery Shopping</option><option>Daily Errand</option></select></div></div>
+      <div class="afrow"><div class="afg"><label>Assistant</label><select id="amb-assistant"></select></div><div class="afg"><label>Date</label><input type="date" id="amb-date"></div></div>
+      <div class="afrow"><div class="afg"><label>Time</label><select id="amb-time"><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option><option>3:00 PM</option></select></div><div class="afg"><label>Amount (₹)</label><input type="number" id="amb-amount" value="480"></div></div>
+      <div class="afg"><label>Status</label><select id="amb-status"><option>Pending</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select></div>
+      <div class="amodal-footer"><button class="abtn abtn-s" onclick="aCloseModal('am-booking')">Cancel</button><button class="abtn abtn-p" onclick="aSaveBooking()">Save</button></div>
+    </div>
+  </div>
+  <div class="amodal-overlay" id="am-assistant">
+    <div class="amodal">
+      <h2 id="am-assistant-title">Add Assistant</h2>
+      <div class="afrow"><div class="afg"><label>Full Name</label><input type="text" id="ama-name" placeholder="Full name"></div><div class="afg"><label>Initials</label><input type="text" id="ama-initials" placeholder="RK" maxlength="3"></div></div>
+      <div class="afrow"><div class="afg"><label>Speciality</label><select id="ama-spec"><option>Hospital & Medicine</option><option>Grocery & Errands</option><option>All Services</option></select></div><div class="afg"><label>Zone</label><select id="ama-zone"><option>Zone A</option><option>Zone B</option><option>Zone C</option><option>Zone D</option></select></div></div>
+      <div class="afrow"><div class="afg"><label>Phone</label><input type="tel" id="ama-phone" placeholder="+91 XXXXX XXXXX"></div><div class="afg"><label>Status</label><select id="ama-status"><option>Available</option><option>On Duty</option><option>Off Duty</option></select></div></div>
+      <div class="amodal-footer"><button class="abtn abtn-s" onclick="aCloseModal('am-assistant')">Cancel</button><button class="abtn abtn-p" onclick="aSaveAssistant()">Save</button></div>
+    </div>
+  </div>
+  <div class="amodal-overlay" id="am-user">
+    <div class="amodal">
+      <h2 id="am-user-title">Add User</h2>
+      <div class="afrow"><div class="afg"><label>Full Name</label><input type="text" id="amu-name" placeholder="Full name"></div><div class="afg"><label>Type</label><select id="amu-type"><option>Family Member</option><option>Elder</option></select></div></div>
+      <div class="afrow"><div class="afg"><label>Phone</label><input type="tel" id="amu-phone" placeholder="+91 XXXXX XXXXX"></div><div class="afg"><label>City</label><input type="text" id="amu-city" placeholder="City"></div></div>
+      <div class="amodal-footer"><button class="abtn abtn-s" onclick="aCloseModal('am-user')">Cancel</button><button class="abtn abtn-p" onclick="aSaveUser()">Save</button></div>
     </div>
   </div>
 </div>
 
 <!-- SUCCESS POPUP -->
-<div id="success-overlay" class="success-overlay" style="display:none;" onclick="closeSuccess()">
+<div id="success-overlay" class="success-overlay" style="display:none" onclick="closeSuccess()">
   <div class="success-card" onclick="event.stopPropagation()">
     <div class="success-icon">✅</div>
     <h3>Booking Confirmed!</h3>
-    <p>Your assistant has been notified and will arrive at the scheduled time. A confirmation SMS has been sent.</p>
+    <p>Your assistant has been notified and will arrive at the scheduled time.</p>
     <div class="success-detail">
       <div class="sd-row"><span>Booking ID</span><span>#EE-2841</span></div>
       <div class="sd-row"><span>Service</span><span>Hospital Visit</span></div>
@@ -410,10 +447,96 @@
       <div class="sd-row"><span>Date & Time</span><span>Jan 20, 10:00 AM</span></div>
       <div class="sd-row"><span>Total (pay after)</span><span>₹480</span></div>
     </div>
-    <button class="btn-primary" style="width:100%;font-size:17px;" onclick="closeSuccess();showPage('dashboard')">View My Bookings</button>
+    <button class="btn-primary" style="width:100%;font-size:17px" onclick="closeSuccess();showPage('dashboard')">View My Bookings</button>
   </div>
 </div>
 
+<div id="toast-container" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px"></div>
+
 <script src="elderease_script.js"></script>
+<script>
+// ===== ADMIN DATA =====
+const ASTORE={get(k){try{return JSON.parse(localStorage.getItem('ee_'+k))||null}catch(e){return null}},set(k,v){localStorage.setItem('ee_'+k,JSON.stringify(v))}};
+const ADEMO={
+  bookings:[{id:'EE-2841',user:'Venkata Ramaiah',service:'Hospital Visit',assistant:'Ravi Kumar',date:'2025-01-20',time:'10:00 AM',amount:480,status:'Pending'},{id:'EE-2797',user:'Sarada Devi',service:'Medicine Pickup',assistant:'Sunita Mishra',date:'2025-01-18',time:'2:00 PM',amount:180,status:'In Progress'},{id:'EE-2701',user:'Krishna Murthy',service:'Grocery Shopping',assistant:'Mohan Rao',date:'2025-01-15',time:'9:00 AM',amount:230,status:'Completed'},{id:'EE-2654',user:'Lakshmi Bai',service:'Daily Errand',assistant:'Ravi Kumar',date:'2025-01-10',time:'11:00 AM',amount:280,status:'Completed'},{id:'EE-2590',user:'Ramarao Garu',service:'Hospital Visit',assistant:'Sunita Mishra',date:'2025-01-05',time:'8:00 AM',amount:510,status:'Cancelled'}],
+  assistants:[{id:'A001',name:'Ravi Kumar',initials:'RK',speciality:'Hospital & Medicine',zone:'Zone A',phone:'+91 98765 11111',status:'Available',rating:4.9,tasks:3,color:'av-g'},{id:'A002',name:'Sunita Mishra',initials:'SM',speciality:'Grocery & Errands',zone:'Zone B',phone:'+91 98765 22222',status:'On Duty',rating:4.8,tasks:5,color:'av-a'},{id:'A003',name:'Mohan Rao',initials:'MR',speciality:'All Services',zone:'Zone C',phone:'+91 98765 33333',status:'Available',rating:4.7,tasks:2,color:'av-t'},{id:'A004',name:'Lakshmi Bai',initials:'LB',speciality:'Hospital & Medicine',zone:'Zone A',phone:'+91 98765 44444',status:'Off Duty',rating:4.6,tasks:0,color:'av-g'}],
+  users:[{id:'U001',name:'Priya Sharma',type:'Family Member',phone:'+91 98765 43210',city:'Hyderabad',bookings:8,joined:'2024-08-10'},{id:'U002',name:'Arjun Kumar',type:'Family Member',phone:'+91 99887 12345',city:'Bangalore',bookings:12,joined:'2024-07-05'},{id:'U003',name:'Venkata Ramaiah',type:'Elder',phone:'+91 94455 67890',city:'Vijayawada',bookings:18,joined:'2024-06-20'},{id:'U004',name:'Sarada Devi',type:'Elder',phone:'+91 91234 56789',city:'Vijayawada',bookings:5,joined:'2024-09-15'}],
+  payments:[{id:'PAY-9001',booking:'EE-2701',user:'Krishna Murthy',amount:230,method:'UPI',date:'2025-01-15',status:'Paid'},{id:'PAY-9002',booking:'EE-2654',user:'Lakshmi Bai',amount:280,method:'Cash',date:'2025-01-10',status:'Paid'},{id:'PAY-9003',booking:'EE-2590',user:'Ramarao Garu',amount:510,method:'UPI',date:'2025-01-05',status:'Refunded'},{id:'PAY-9004',booking:'EE-2841',user:'Venkata Ramaiah',amount:480,method:'Pending',date:'2025-01-20',status:'Pending'}],
+  reviews:[{user:'Priya Sharma',assistant:'Ravi Kumar',service:'Hospital Visit',rating:5,comment:'So patient and kind!',date:'2025-01-15'},{user:'Arjun Kumar',assistant:'Sunita Mishra',service:'Grocery Shopping',rating:5,comment:'Always brings exactly what is on the list.',date:'2025-01-10'},{user:'Venkata Ramaiah',assistant:'Mohan Rao',service:'Daily Errand',rating:4,comment:'Good service, arrived on time.',date:'2024-12-28'},{user:'Sarada Devi',assistant:'Ravi Kumar',service:'Medicine Pickup',rating:5,comment:'Got medicines within the hour.',date:'2024-12-20'}],
+  notifications:[{target:'All Users',type:'Announcement',title:'New Year Offer!',message:'Get 20% off on all services this January.',time:'2025-01-01 09:00',read:true},{target:'Assistants',type:'Reminder',title:'Schedule Update',message:'Please update your availability.',time:'2025-01-10 10:00',read:false}],
+  settings:{name:'ElderEase',email:'support@elderease.com',phone:'1800-ELDER-HELP',fee:30,pricing:{hospital:300,medicine:150,grocery:200,errand:250},features:{liveTracking:true,smsAlerts:true,emergencyMode:true,onlinePayments:false,ratings:true}}
+};
+function aInitData(){['bookings','assistants','users','payments','reviews','notifications','settings'].forEach(k=>{if(!ASTORE.get(k))ASTORE.set(k,ADEMO[k])});}
+
+let aEditBId=null,aEditAId=null,aEditUId=null,acB,acR,acS,acP;
+const aTabs={overview:{title:'Overview',action:'+ Add Booking',fn:'aOpenBookingModal()'},bookings:{title:'Bookings',action:'+ New Booking',fn:'aOpenBookingModal()'},assistants:{title:'Assistants',action:'+ Add Assistant',fn:'aOpenAssistantModal()'},users:{title:'Users',action:'+ Add User',fn:'aOpenUserModal()'},payments:{title:'Payments',action:'Export CSV',fn:'aExportPayments()'},reviews:{title:'Reviews',action:'Export Reviews',fn:'aExportReviews()'},notifications:{title:'Notifications',action:'Mark All Read',fn:'aMarkAllRead()'},settings:{title:'Settings',action:'Save All',fn:'aSaveSettings()'}};
+
+function aToast(msg,type='success'){const c=document.getElementById('toast-container');const t=document.createElement('div');t.style.cssText='background:'+(type==='error'?'#C0392B':type==='info'?'var(--teal)':'var(--sage)')+';color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.15);display:flex;align-items:center;gap:8px;max-width:300px';t.innerHTML=(type==='success'?'✅':type==='error'?'❌':'ℹ️')+' '+msg;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
+
+function showAdminTab(name){document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('atab-'+name).classList.add('active');document.querySelectorAll('.admin-nav-item').forEach(n=>{if(n.textContent.trim().toLowerCase().includes(aTabs[name].title.toLowerCase()))n.classList.add('active');});document.getElementById('admin-page-title').textContent=aTabs[name].title;const btn=document.getElementById('admin-action-btn');btn.textContent=aTabs[name].action;btn.setAttribute('onclick',aTabs[name].fn);aRenderTab(name);}
+function aRenderTab(n){if(n==='overview')aRenderOverview();else if(n==='bookings')aRenderBookings();else if(n==='assistants')aRenderAssistants();else if(n==='users')aRenderUsers();else if(n==='payments')aRenderPayments();else if(n==='reviews')aRenderReviews();else if(n==='notifications')aRenderNotifs();else if(n==='settings')aRenderSettings();}
+function adminTopAction(){const t=document.getElementById('admin-page-title').textContent.toLowerCase();eval(Object.values(aTabs).find(x=>x.title.toLowerCase()===t)?.fn||'aOpenBookingModal()');}
+
+function aRenderOverview(){const b=ASTORE.get('bookings')||[],u=ASTORE.get('users')||[],a=ASTORE.get('assistants')||[],p=ASTORE.get('payments')||[];const rev=p.filter(x=>x.status==='Paid').reduce((s,x)=>s+x.amount,0);document.getElementById('a-overview-stats').innerHTML=`<div class="a-stat-card accent"><div class="asl">Active Bookings</div><div class="asn">${b.filter(x=>x.status==='Pending'||x.status==='In Progress').length}</div><div class="ass">Pending & In Progress</div></div><div class="a-stat-card"><div class="asl">Assistants</div><div class="asn">${a.length}</div><div class="ass">${a.filter(x=>x.status==='Available').length} available</div></div><div class="a-stat-card"><div class="asl">Users</div><div class="asn">${u.length}</div><div class="ass">${u.filter(x=>x.type==='Elder').length} elders</div></div><div class="a-stat-card"><div class="asl">Revenue</div><div class="asn">₹${rev.toLocaleString()}</div><div class="ass">${p.filter(x=>x.status==='Paid').length} paid</div></div>`;
+if(acB)acB.destroy();acB=new Chart(document.getElementById('ac-bookings'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Bookings',data:[4,6,3,7,5,8,4],backgroundColor:'#3B6D11',borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:2}}}}});
+if(acR)acR.destroy();acR=new Chart(document.getElementById('ac-revenue'),{type:'line',data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan'],datasets:[{label:'Revenue',data:[28000,35000,29000,42000,38000,rev||44820],borderColor:'#0F6E56',backgroundColor:'rgba(15,110,86,0.08)',tension:0.4,fill:true,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'₹'+Math.round(v/1000)+'k'}}}}});
+const svcs=['Hospital Visit','Medicine Pickup','Grocery Shopping','Daily Errand'],scol=['#3B6D11','#EF9F27','#0F6E56','#993C1D'],sd=svcs.map(s=>b.filter(x=>x.service===s).length||1);
+if(acS)acS.destroy();acS=new Chart(document.getElementById('ac-services'),{type:'doughnut',data:{labels:svcs,datasets:[{data:sd,backgroundColor:scol,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+const tot=sd.reduce((a,b)=>a+b,0);document.getElementById('a-svc-legend').innerHTML=svcs.map((l,i)=>`<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:${scol[i]};flex-shrink:0"></span>${l} <b>${Math.round(sd[i]/tot*100)}%</b></span>`).join('');
+document.getElementById('a-recent').innerHTML=[...b].sort((x,y)=>new Date(y.date)-new Date(x.date)).slice(0,5).map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><div class="adot ${x.status==='Completed'?'adot-g':x.status==='In Progress'?'adot-a':'adot-r'}"></div><div style="flex:1"><strong style="font-size:12px">${x.user}</strong><div style="font-size:11px;color:var(--text-mid)">${x.service}</div></div><span class="abadge ab-${x.status==='Completed'?'done':x.status==='In Progress'?'progress':x.status==='Pending'?'pending':'cancelled'}">${x.status}</span></div>`).join('');}
+
+function aRenderBookings(){const b=ASTORE.get('bookings')||[],q=(document.getElementById('a-bsearch')||{}).value||'',sf=(document.getElementById('a-bstatus')||{}).value||'',sv=(document.getElementById('a-bservice')||{}).value||'';const f=b.filter(x=>(!q||x.user.toLowerCase().includes(q.toLowerCase())||x.id.toLowerCase().includes(q.toLowerCase()))&&(!sf||x.status===sf)&&(!sv||x.service===sv));document.getElementById('a-btbody').innerHTML=f.map(x=>`<tr><td><strong>#${x.id}</strong></td><td>${x.user}</td><td>${x.service}</td><td>${x.assistant}</td><td>${x.date}</td><td>₹${x.amount}</td><td><span class="abadge ab-${x.status==='Completed'?'done':x.status==='In Progress'?'progress':x.status==='Pending'?'pending':'cancelled'}">${x.status}</span></td><td><button class="abtn abtn-s" style="margin-right:4px" onclick="aOpenBookingModal('${x.id}')">Edit</button><button class="abtn abtn-d" onclick="aDeleteBooking('${x.id}')">Del</button></td></tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--text-mid);padding:20px">No bookings found</td></tr>';}
+function aOpenBookingModal(id=null){aEditBId=id;const a=ASTORE.get('assistants')||[];document.getElementById('amb-assistant').innerHTML=a.map(x=>`<option>${x.name}</option>`).join('');document.getElementById('amb-date').value=new Date().toISOString().split('T')[0];document.getElementById('am-booking-title').textContent=id?'Edit Booking':'New Booking';if(id){const b=(ASTORE.get('bookings')||[]).find(x=>x.id===id);if(b){document.getElementById('amb-user').value=b.user;document.getElementById('amb-service').value=b.service;document.getElementById('amb-assistant').value=b.assistant;document.getElementById('amb-date').value=b.date;document.getElementById('amb-time').value=b.time;document.getElementById('amb-amount').value=b.amount;document.getElementById('amb-status').value=b.status;}}else{document.getElementById('amb-user').value='';document.getElementById('amb-amount').value=480;document.getElementById('amb-status').value='Pending';}document.getElementById('am-booking').classList.add('open');}
+function aSaveBooking(){const user=document.getElementById('amb-user').value.trim();if(!user){aToast('Please enter user name','error');return;}const b=ASTORE.get('bookings')||[];const nb={id:aEditBId||'EE-'+Math.floor(Math.random()*9000+1000),user,service:document.getElementById('amb-service').value,assistant:document.getElementById('amb-assistant').value,date:document.getElementById('amb-date').value,time:document.getElementById('amb-time').value,amount:parseInt(document.getElementById('amb-amount').value)||0,status:document.getElementById('amb-status').value};if(aEditBId){const i=b.findIndex(x=>x.id===aEditBId);if(i>-1)b[i]=nb;aToast('Updated!');}else{b.unshift(nb);aToast('Created!');}ASTORE.set('bookings',b);aCloseModal('am-booking');aRenderBookings();}
+function aDeleteBooking(id){if(!confirm('Delete?'))return;ASTORE.set('bookings',(ASTORE.get('bookings')||[]).filter(x=>x.id!==id));aRenderBookings();aToast('Deleted');}
+
+function aRenderAssistants(){const a=ASTORE.get('assistants')||[],q=(document.getElementById('a-asearch')||{}).value||'',sf=(document.getElementById('a-astatus')||{}).value||'';const f=a.filter(x=>(!q||x.name.toLowerCase().includes(q.toLowerCase()))&&(!sf||x.status===sf));document.getElementById('a-atbody').innerHTML=f.map(x=>`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="aav ${x.color||'av-g'}">${x.initials}</div>${x.name}</div></td><td>${x.speciality}</td><td>${x.zone}</td><td>${x.tasks}</td><td><span class="astars">${'★'.repeat(Math.floor(x.rating))}${'☆'.repeat(5-Math.floor(x.rating))}</span> ${x.rating}</td><td><span class="abadge ab-${x.status==='Available'?'available':x.status==='On Duty'?'duty':'off'}">${x.status}</span></td><td><button class="abtn abtn-s" style="margin-right:4px" onclick="aOpenAssistantModal('${x.id}')">Edit</button><button class="abtn abtn-d" onclick="aDeleteAssistant('${x.id}')">Del</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text-mid);padding:20px">No assistants found</td></tr>';}
+function aOpenAssistantModal(id=null){aEditAId=id;document.getElementById('am-assistant-title').textContent=id?'Edit Assistant':'Add Assistant';if(id){const a=(ASTORE.get('assistants')||[]).find(x=>x.id===id);if(a){document.getElementById('ama-name').value=a.name;document.getElementById('ama-initials').value=a.initials;document.getElementById('ama-spec').value=a.speciality;document.getElementById('ama-zone').value=a.zone;document.getElementById('ama-phone').value=a.phone;document.getElementById('ama-status').value=a.status;}}else{['ama-name','ama-initials','ama-phone'].forEach(i=>document.getElementById(i).value='');}document.getElementById('am-assistant').classList.add('open');}
+function aSaveAssistant(){const name=document.getElementById('ama-name').value.trim();if(!name){aToast('Enter name','error');return;}const a=ASTORE.get('assistants')||[];const cols=['av-g','av-a','av-t','av-c'];const na={id:aEditAId||'A'+String(a.length+1).padStart(3,'0'),name,initials:document.getElementById('ama-initials').value.trim().toUpperCase()||name.slice(0,2).toUpperCase(),speciality:document.getElementById('ama-spec').value,zone:document.getElementById('ama-zone').value,phone:document.getElementById('ama-phone').value,status:document.getElementById('ama-status').value,rating:aEditAId?(a.find(x=>x.id===aEditAId)||{}).rating||4.5:4.5,tasks:0,color:cols[a.length%cols.length]};if(aEditAId){const i=a.findIndex(x=>x.id===aEditAId);if(i>-1){na.rating=a[i].rating;na.tasks=a[i].tasks;na.color=a[i].color;a[i]=na;}aToast('Updated!');}else{a.push(na);aToast('Added!');}ASTORE.set('assistants',a);aCloseModal('am-assistant');aRenderAssistants();}
+function aDeleteAssistant(id){if(!confirm('Remove?'))return;ASTORE.set('assistants',(ASTORE.get('assistants')||[]).filter(x=>x.id!==id));aRenderAssistants();aToast('Removed');}
+
+function aRenderUsers(){const u=ASTORE.get('users')||[],q=(document.getElementById('a-usearch')||{}).value||'',tf=(document.getElementById('a-utype')||{}).value||'';const f=u.filter(x=>(!q||x.name.toLowerCase().includes(q.toLowerCase())||x.city.toLowerCase().includes(q.toLowerCase()))&&(!tf||x.type===tf));document.getElementById('a-utbody').innerHTML=f.map(x=>`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="aav av-t" style="font-size:10px">${x.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>${x.name}</div></td><td><span class="abadge ${x.type==='Elder'?'ab-available':'ab-progress'}">${x.type}</span></td><td>${x.phone}</td><td>${x.city}</td><td>${x.bookings}</td><td>${x.joined}</td><td><button class="abtn abtn-s" style="margin-right:4px" onclick="aOpenUserModal('${x.id}')">Edit</button><button class="abtn abtn-d" onclick="aDeleteUser('${x.id}')">Del</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text-mid);padding:20px">No users found</td></tr>';}
+function aOpenUserModal(id=null){aEditUId=id;document.getElementById('am-user-title').textContent=id?'Edit User':'Add User';if(id){const u=(ASTORE.get('users')||[]).find(x=>x.id===id);if(u){document.getElementById('amu-name').value=u.name;document.getElementById('amu-type').value=u.type;document.getElementById('amu-phone').value=u.phone;document.getElementById('amu-city').value=u.city;}}else{['amu-name','amu-phone','amu-city'].forEach(i=>document.getElementById(i).value='');}document.getElementById('am-user').classList.add('open');}
+function aSaveUser(){const name=document.getElementById('amu-name').value.trim();if(!name){aToast('Enter name','error');return;}const u=ASTORE.get('users')||[];const nu={id:aEditUId||'U'+String(u.length+1).padStart(3,'0'),name,type:document.getElementById('amu-type').value,phone:document.getElementById('amu-phone').value,city:document.getElementById('amu-city').value,bookings:aEditUId?(u.find(x=>x.id===aEditUId)||{}).bookings||0:0,joined:aEditUId?(u.find(x=>x.id===aEditUId)||{}).joined||new Date().toISOString().split('T')[0]:new Date().toISOString().split('T')[0]};if(aEditUId){const i=u.findIndex(x=>x.id===aEditUId);if(i>-1)u[i]=nu;aToast('Updated!');}else{u.push(nu);aToast('Added!');}ASTORE.set('users',u);aCloseModal('am-user');aRenderUsers();}
+function aDeleteUser(id){if(!confirm('Remove?'))return;ASTORE.set('users',(ASTORE.get('users')||[]).filter(x=>x.id!==id));aRenderUsers();aToast('Removed');}
+
+function aRenderPayments(){const p=ASTORE.get('payments')||[],q=(document.getElementById('a-psearch')||{}).value||'',sf=(document.getElementById('a-pstatus')||{}).value||'';const paid=p.filter(x=>x.status==='Paid').reduce((s,x)=>s+x.amount,0),pend=p.filter(x=>x.status==='Pending').reduce((s,x)=>s+x.amount,0),ref=p.filter(x=>x.status==='Refunded').reduce((s,x)=>s+x.amount,0);document.getElementById('a-pay-stats').innerHTML=`<div class="a-stat-card accent"><div class="asl">Collected</div><div class="asn">₹${paid.toLocaleString()}</div><div class="ass">${p.filter(x=>x.status==='Paid').length} payments</div></div><div class="a-stat-card"><div class="asl">Pending</div><div class="asn">₹${pend.toLocaleString()}</div><div class="ass">${p.filter(x=>x.status==='Pending').length} pending</div></div><div class="a-stat-card"><div class="asl">Refunded</div><div class="asn">₹${ref.toLocaleString()}</div><div class="ass">${p.filter(x=>x.status==='Refunded').length} refunds</div></div>`;
+if(acP)acP.destroy();acP=new Chart(document.getElementById('ac-payments'),{type:'bar',data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan'],datasets:[{label:'₹',data:[28000,35000,29000,42000,38000,paid||44820],backgroundColor:'#3B6D11',borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'₹'+Math.round(v/1000)+'k'}}}}});
+const f=p.filter(x=>(!q||x.user.toLowerCase().includes(q.toLowerCase())||x.id.toLowerCase().includes(q.toLowerCase()))&&(!sf||x.status===sf));document.getElementById('a-ptbody').innerHTML=f.map(x=>`<tr><td><strong>${x.id}</strong></td><td>#${x.booking}</td><td>${x.user}</td><td>₹${x.amount}</td><td>${x.method}</td><td>${x.date}</td><td><span class="abadge ab-${x.status==='Paid'?'done':x.status==='Pending'?'pending':'cancelled'}">${x.status}</span></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text-mid);padding:20px">No payments</td></tr>';}
+function aExportPayments(){const p=ASTORE.get('payments')||[];const csv='Payment ID,Booking,User,Amount,Method,Date,Status\n'+p.map(x=>`${x.id},${x.booking},${x.user},${x.amount},${x.method},${x.date},${x.status}`).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='payments.csv';a.click();aToast('Exported!');}
+
+function aRenderReviews(){const r=ASTORE.get('reviews')||[],q=(document.getElementById('a-rsearch')||{}).value||'',rf=(document.getElementById('a-rrating')||{}).value||'';const avg=r.length?(r.reduce((s,x)=>s+x.rating,0)/r.length).toFixed(1):0;document.getElementById('a-rev-stats').innerHTML=`<div class="a-stat-card accent"><div class="asl">Avg Rating</div><div class="asn">${avg} ⭐</div><div class="ass">${r.length} total</div></div><div class="a-stat-card"><div class="asl">5-Star</div><div class="asn">${r.filter(x=>x.rating===5).length}</div><div class="ass">${r.length?Math.round(r.filter(x=>x.rating===5).length/r.length*100):0}%</div></div><div class="a-stat-card"><div class="asl">Total Reviews</div><div class="asn">${r.length}</div><div class="ass">All assistants</div></div>`;
+document.getElementById('a-rating-bars').innerHTML=[5,4,3,2,1].map(n=>{const c=r.filter(x=>x.rating===n).length,p=r.length?Math.round(c/r.length*100):0;return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;width:25px">${n}★</span><div style="flex:1;background:var(--border);border-radius:4px;height:7px;overflow:hidden"><div style="width:${p}%;background:var(--amber-mid);height:100%;border-radius:4px"></div></div><span style="font-size:12px;color:var(--text-mid);width:20px">${c}</span></div>`;}).join('');
+const a=ASTORE.get('assistants')||[];document.getElementById('a-top-assist').innerHTML=[...a].sort((x,y)=>y.rating-x.rating).slice(0,4).map(x=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><div class="aav ${x.color||'av-g'}">${x.initials}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${x.name}</div><div style="font-size:11px;color:var(--text-mid)">${x.speciality}</div></div><span class="astars">${x.rating}★</span></div>`).join('');
+const f=r.filter(x=>(!q||x.user.toLowerCase().includes(q.toLowerCase())||x.assistant.toLowerCase().includes(q.toLowerCase()))&&(!rf||x.rating==rf));document.getElementById('a-rtbody').innerHTML=f.map(x=>`<tr><td>${x.user}</td><td>${x.assistant}</td><td>${x.service}</td><td><span class="astars">${'★'.repeat(x.rating)}${'☆'.repeat(5-x.rating)}</span></td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${x.comment}</td><td>${x.date}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--text-mid);padding:20px">No reviews</td></tr>';}
+function aExportReviews(){const r=ASTORE.get('reviews')||[];const csv='User,Assistant,Service,Rating,Comment,Date\n'+r.map(x=>`"${x.user}","${x.assistant}","${x.service}",${x.rating},"${x.comment}",${x.date}`).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='reviews.csv';a.click();aToast('Exported!');}
+
+function aRenderNotifs(){const n=ASTORE.get('notifications')||[];document.getElementById('an-list').innerHTML=n.length?n.map((x,i)=>`<div class="anotif"><div class="anotif-dot ${x.read?'':'unread'}"></div><div style="flex:1"><strong style="font-size:13px">${x.title}</strong><div style="font-size:12px;margin:2px 0">${x.message}</div><span style="font-size:11px;color:var(--text-mid)">${x.target} • ${x.type} • ${x.time}</span></div><button class="abtn abtn-d" onclick="aDeleteNotif(${i})" style="padding:4px 8px;font-size:11px">✕</button></div>`).join(''):'<p style="color:var(--text-mid);font-size:13px;text-align:center;padding:20px">No notifications yet</p>';}
+function aSendNotif(){const title=document.getElementById('an-title').value.trim(),msg=document.getElementById('an-message').value.trim();if(!title||!msg){aToast('Fill title and message','error');return;}const n=ASTORE.get('notifications')||[];n.unshift({target:document.getElementById('an-target').value,type:document.getElementById('an-type').value,title,message:msg,time:new Date().toLocaleString('en-IN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),read:false});ASTORE.set('notifications',n);document.getElementById('an-title').value='';document.getElementById('an-message').value='';aRenderNotifs();aToast('Sent!');}
+function aDeleteNotif(i){const n=ASTORE.get('notifications')||[];n.splice(i,1);ASTORE.set('notifications',n);aRenderNotifs();}
+function aClearNotifs(){if(!confirm('Clear all?'))return;ASTORE.set('notifications',[]);aRenderNotifs();aToast('Cleared');}
+function aMarkAllRead(){ASTORE.set('notifications',(ASTORE.get('notifications')||[]).map(x=>({...x,read:true})));aRenderNotifs();aToast('Marked read');}
+
+function aRenderSettings(){const s=ASTORE.get('settings')||ADEMO.settings;document.getElementById('as-name').value=s.name||'';document.getElementById('as-email').value=s.email||'';document.getElementById('as-phone').value=s.phone||'';document.getElementById('as-fee').value=s.fee||30;document.getElementById('as-pricing').innerHTML=`<div class="afg"><label>Hospital Visit (₹)</label><input type="number" id="ap-hospital" value="${s.pricing?.hospital||300}"></div><div class="afg"><label>Medicine Pickup (₹)</label><input type="number" id="ap-medicine" value="${s.pricing?.medicine||150}"></div><div class="afg"><label>Grocery Shopping (₹)</label><input type="number" id="ap-grocery" value="${s.pricing?.grocery||200}"></div><div class="afg"><label>Daily Errand (₹)</label><input type="number" id="ap-errand" value="${s.pricing?.errand||250}"></div><button class="abtn abtn-p" style="width:100%" onclick="aSavePricing()">Save Pricing</button>`;const fl=[{k:'liveTracking',l:'Live Tracking'},{k:'smsAlerts',l:'SMS Alerts'},{k:'emergencyMode',l:'Emergency Mode'},{k:'onlinePayments',l:'Online Payments'},{k:'ratings',l:'Ratings & Reviews'}];const ft=s.features||{};document.getElementById('as-features').innerHTML=fl.map(f=>`<div class="atoggle-wrap"><label class="atoggle"><input type="checkbox" id="af-${f.k}" ${ft[f.k]?'checked':''} onchange="aSaveFeature('${f.k}',this.checked)"><span class="atoggle-slider"></span></label><span style="font-size:13px;font-weight:500">${f.l}</span></div>`).join('');}
+function aSaveSettings(){const s=ASTORE.get('settings')||{};s.name=document.getElementById('as-name').value;s.email=document.getElementById('as-email').value;s.phone=document.getElementById('as-phone').value;s.fee=parseInt(document.getElementById('as-fee').value)||30;ASTORE.set('settings',s);aToast('Saved!');}
+function aSavePricing(){const s=ASTORE.get('settings')||{};s.pricing={hospital:parseInt(document.getElementById('ap-hospital').value)||300,medicine:parseInt(document.getElementById('ap-medicine').value)||150,grocery:parseInt(document.getElementById('ap-grocery').value)||200,errand:parseInt(document.getElementById('ap-errand').value)||250};ASTORE.set('settings',s);aToast('Pricing saved!');}
+function aSaveFeature(k,v){const s=ASTORE.get('settings')||{};if(!s.features)s.features={};s.features[k]=v;ASTORE.set('settings',s);aToast(`${k} ${v?'enabled':'disabled'}`,'info');}
+function aResetDemo(){if(!confirm('Reset to demo data?'))return;Object.keys(ADEMO).forEach(k=>ASTORE.set(k,ADEMO[k]));aToast('Demo data restored!');aRenderOverview();}
+function aClearAll(){if(!confirm('Clear ALL data?'))return;['bookings','assistants','users','payments','reviews','notifications','settings'].forEach(k=>localStorage.removeItem('ee_'+k));aInitData();aToast('Cleared','info');aRenderOverview();}
+
+function aCloseModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.amodal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+
+// Hook into showPage to init admin when opened
+const _origSP=window.showPage;
+window.showPage=function(name){
+  _origSP(name);
+  if(name==='admin'){
+    aInitData();
+    document.getElementById('admin-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+    showAdminTab('overview');
+  }
+};
+</script>
 </body>
 </html>
