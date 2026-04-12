@@ -9,12 +9,13 @@ export default async function handler(req, res) {
     const { elderName, age, address, emergency, service, date, time, instructions, amount, userPhone } = req.body;
     if (!elderName || !service || !date) return res.status(400).json({ error: 'Missing required fields' });
     const booking = {
-      bookingId: 'EE-' + Math.floor(Math.random() * 9000 + 1000),
-      elderName, age, address, emergency,
-      service, date, time, instructions, amount,
-      status: 'Pending',
-      createdAt: new Date()
-    };
+  bookingId: 'EE-' + Math.floor(Math.random() * 9000 + 1000),
+  elderName, age, address, emergency,
+  service, date, time, instructions, amount,
+  userPhone: userPhone || 'guest',
+  status: 'Pending',
+  createdAt: new Date()
+};
     await db.collection('bookings').insertOne(booking);
     res.status(200).json({ success: true, bookingId: booking.bookingId });
   } catch (e) {
