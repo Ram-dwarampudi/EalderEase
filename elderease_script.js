@@ -379,10 +379,15 @@ document.querySelector('.auth-btn').addEventListener('click', async function() {
       body: JSON.stringify({ phone, password })
     });
     const data = await res.json();
-    if (data.success) {
-      localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
-      showPage('dashboard');
-    } else {
+   if (data.success) {
+  localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
+  // Update dashboard greeting
+  const user = data.name || data.phone;
+  const greet = document.querySelector('#page-dashboard .dash-header h2');
+  if (greet) greet.textContent = 'Good morning, ' + user + ' 👋';
+  showPage('dashboard');
+}
+    else {
       alert(data.error || 'Login failed');
     }
   } catch(e) {
