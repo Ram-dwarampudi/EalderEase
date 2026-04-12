@@ -236,12 +236,12 @@
       <div class="bt-header"><h3>All Bookings</h3><div class="bt-filter"><button class="filter-btn active">All</button><button class="filter-btn">Upcoming</button><button class="filter-btn">Completed</button></div></div>
       <table><thead><tr><th>Booking ID</th><th>Service</th><th>Assistant</th><th>Date & Time</th><th>Amount</th><th>Status</th><th>Rating</th></tr></thead>
       <tbody id="bookings-tbody">
-        <tr><td>#EE-2841</td><td>🏥 Hospital Visit</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px">RK</div>Ravi Kumar</div></td><td>Jan 20, 10:00 AM</td><td>₹480</td><td><span class="status-badge s-pending">Pending</span></td><td>—</td></tr>
-        <tr><td>#EE-2797</td><td>💊 Medicine Pickup</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px">SM</div>Sunita Mishra</div></td><td>Jan 18, 2:00 PM</td><td>₹180</td><td><span class="status-badge s-progress">In Progress</span></td><td>—</td></tr>
-        <tr><td>#EE-2701</td><td>🛒 Grocery Shopping</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-teal" style="width:32px;height:32px;font-size:12px">MR</div>Mohan Rao</div></td><td>Jan 15, 9:00 AM</td><td>₹230</td><td><span class="status-badge s-done">Completed</span></td><td><span class="rating-stars">★★★★★</span></td></tr>
-        <tr><td>#EE-2654</td><td>📋 Daily Errand</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-green" style="width:32px;height:32px;font-size:12px">RK</div>Ravi Kumar</div></td><td>Jan 10, 11:00 AM</td><td>₹280</td><td><span class="status-badge s-done">Completed</span></td><td><span class="rating-stars">★★★★☆</span></td></tr>
-        <tr><td>#EE-2590</td><td>🏥 Hospital Visit</td><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar av-amber" style="width:32px;height:32px;font-size:12px">SM</div>Sunita Mishra</div></td><td>Jan 5, 8:00 AM</td><td>₹510</td><td><span class="status-badge s-cancelled">Cancelled</span></td><td>—</td></tr>
-      </tbody></table>
+  <tr id="no-bookings-row">
+    <td colspan="7" style="text-align:center;padding:40px;color:var(--text-light)">
+      No bookings yet. <a href="#" onclick="showPage('booking')">Book your first service</a>
+    </td>
+  </tr>
+</tbody></table>
     </div>
   </div>
 </div>
