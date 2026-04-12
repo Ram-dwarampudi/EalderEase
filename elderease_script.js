@@ -381,11 +381,13 @@ window.addEventListener('DOMContentLoaded', function() {
       });
       const data = await res.json();
       if (data.success) {
-        localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
-        const greet = document.getElementById('dash-greeting');
-        if (greet) greet.textContent = 'Good morning, ' + (data.name || data.phone) + ' 👋';
-        showPage('dashboard');
-      } else {
+  localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
+  const greet = document.getElementById('dash-greeting');
+  if (greet) greet.textContent = 'Good morning, ' + (data.name || data.phone) + ' 👋';
+  const navBtn = document.getElementById('nav-login');
+  if (navBtn) { navBtn.textContent = 'Sign Out'; navBtn.onclick = function(){ localStorage.removeItem('ee_loggedIn'); location.reload(); }; }
+  showPage('dashboard');
+}else {
         alert(data.error || 'Login failed. Please register first.');
       }
     } catch(e) {
