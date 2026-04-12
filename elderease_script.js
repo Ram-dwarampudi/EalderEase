@@ -362,6 +362,16 @@ document.addEventListener('DOMContentLoaded', function () {
   initDateInput();
   initHeroButtons();
   initFormSync();
+   const saved = localStorage.getItem('ee_loggedIn');
+  if (saved) {
+    const user = JSON.parse(saved);
+    const navBtn = document.getElementById('nav-login');
+    if (navBtn) { navBtn.textContent = 'Sign Out'; navBtn.onclick = function(){ localStorage.removeItem('ee_loggedIn'); location.reload(); }; }
+    const greet = document.getElementById('dash-greeting');
+    if (greet) greet.textContent = 'Good morning, ' + (user.name || user.phone) + ' 👋';
+    const adminBtn = document.getElementById('nav-admin');
+    if (adminBtn) adminBtn.style.display = user.isAdmin ? '' : 'none';
+  }
 });
 
 // ===== MONGODB FORM WIRING =====
@@ -387,6 +397,8 @@ window.addEventListener('DOMContentLoaded', function() {
   if (greet) greet.textContent = 'Good morning, ' + (data.name || data.phone) + ' 👋';
   const navBtn = document.getElementById('nav-login');
   if (navBtn) { navBtn.textContent = 'Sign Out'; navBtn.onclick = function(){ localStorage.removeItem('ee_loggedIn'); location.reload(); }; }
+  const adminBtn = document.getElementById('nav-admin');
+  if (adminBtn) adminBtn.style.display = isAdmin ? '' : 'none';
   showPage('dashboard');
 }else {
         alert(data.error || 'Login failed. Please register first.');
