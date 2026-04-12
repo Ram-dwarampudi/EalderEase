@@ -166,6 +166,42 @@ function applyLoginState(user) {
   if (adminBtn) adminBtn.style.display = user.isAdmin ? '' : 'none';
 }
 
+// ===== LOAD USER BOOKINGS FROM MONGODB =====
+async function loadUserBookings(phone) {
+  if (!phone) return;
+  try {
+    const res  = await fetch('/api/getbookings?phone=' + encodeURIComponent(phone));
+    const data = await res.json();
+    if (!data.success) return;
+    const bookings = data.bookings;
+    const tbody = document.getElementById('bookings-tbody');
+    if (!tbody) return;
+
+    if (bookings.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-light)">No bookings yet. <a href="#" onclick="showPage('booking')">Book your first service</a></td></tr>`;
+    } else {
+      tbody.innerHTML = bookings.map(b => `
+        <tr>
+          <td>#${b.bookingId}</td>
+          <td>${b.service || '—'}</td>
+          <td>—</td>
+          <td>${b.date || '—'}${b.time ? ', ' + b.time : ''}</td>
+          <td>₹${b.amount || 0}</td>
+          <td><span class="status-badge s-pending">${b.status}</span></td>
+          <td>—</td>
+        </tr>`).join('');
+    }
+
+    // Update stats
+    const upcoming  = bookings.filter(b => b.status === 'Pending' || b.status === 'In Progress').length;
+    const completed = bookings.filter(b => b.status === 'Completed').length;
+    const spent     = bookings.filter(b => b.status !== 'Cancelled').reduce((s, b) => s + (b.amount || 0), 0);
+    const upEl = document.getElementById('stat-upcoming');  if (upEl) upEl.textContent = upcoming;
+    const coEl = document.getElementById('stat-completed'); if (coEl) coEl.textContent = completed;
+    const spEl = document.getElementById('stat-spent');     if (spEl) spEl.textContent = '₹' + spent.toLocaleString();
+  } catch(e) { console.error('Failed to load bookings', e); }
+}
+
 // ===== LOGIN / REGISTER =====
 function initAuthToggle() {
   const toggleBtn = document.querySelector('.auth-toggle button');
@@ -203,7 +239,6 @@ function initAuthToggle() {
   authBtn.addEventListener('click', async function () {
     const inputs = document.querySelectorAll('.auth-form input');
     if (isRegister) {
-      // REGISTER — inputs: [name, phone, password]
       const name     = inputs[0]?.value.trim();
       const phone    = inputs[1]?.value.trim();
       const password = inputs[2]?.value.trim();
@@ -219,7 +254,6 @@ function initAuthToggle() {
         }
       } catch(e) { showToast('Something went wrong.', 'error'); }
     } else {
-      // LOGIN — inputs: [phone, password]
       const phone    = inputs[0]?.value.trim();
       const password = inputs[1]?.value.trim();
       if (!phone || !password) { showToast('Please fill in all fields.', 'error'); return; }
@@ -231,6 +265,7 @@ function initAuthToggle() {
           const user = { name: data.name, phone: data.phone, isAdmin };
           localStorage.setItem('ee_loggedIn', JSON.stringify(user));
           applyLoginState(user);
+          loadUserBookings(user.phone);
           showToast('Signed in successfully! 🌿', 'success');
           setTimeout(() => showPage('dashboard'), 1000);
         } else {
@@ -318,11 +353,17 @@ function initBookingApi() {
     const time         = document.querySelector('.timeslot.selected')?.textContent;
     const instructions = document.querySelector('textarea')?.value.trim();
     if (!elderName || !date) { showToast('Please fill elder name and date.', 'error'); return; }
+    const saved = localStorage.getItem('ee_loggedIn');
+    const userPhone = saved ? JSON.parse(saved).phone : 'guest';
     try {
-      const res  = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ elderName, service, date, time, instructions, amount: 480 }) });
+      const res  = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ elderName, service, date, time, instructions, amount: 480, userPhone }) });
       const data = await res.json();
-      if (data.success) showSuccess();
-      else showToast(data.error || 'Booking failed', 'error');
+      if (data.success) {
+        showSuccess();
+        loadUserBookings(userPhone);
+      } else {
+        showToast(data.error || 'Booking failed', 'error');
+      }
     } catch(e) { showToast('Something went wrong.', 'error'); }
   });
 }
@@ -348,6 +389,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Restore login state on page load
   const saved = localStorage.getItem('ee_loggedIn');
   if (saved) {
-    try { applyLoginState(JSON.parse(saved)); } catch(e) {}
+    try {
+      const user = JSON.parse(saved);
+      applyLoginState(user);
+      loadUserBookings(user.phone);
+    } catch(e) {}
   }
 });
