@@ -381,7 +381,8 @@ window.addEventListener('DOMContentLoaded', function() {
       });
       const data = await res.json();
       if (data.success) {
-  localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone }));
+  const isAdmin = data.phone === 'ramdwarampudi19@gmail.com';
+  localStorage.setItem('ee_loggedIn', JSON.stringify({ name: data.name, phone: data.phone, isAdmin }));
   const greet = document.getElementById('dash-greeting');
   if (greet) greet.textContent = 'Good morning, ' + (data.name || data.phone) + ' 👋';
   const navBtn = document.getElementById('nav-login');
